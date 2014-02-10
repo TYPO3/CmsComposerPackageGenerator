@@ -1,15 +1,131 @@
-<html>
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
 <head>
-	<title>Themes for TYPO3</title>
+
+	<!-- Basic Page Needs
+  ================================================== -->
+	<meta charset="utf-8">
+	<title>TYPO3 CMS Composer</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<!-- CSS
+  ================================================== -->
+	<link rel="stylesheet" href="http://composer.lightwerk.com/stylesheets/base.css">
+	<link rel="stylesheet" href="http://composer.lightwerk.com/stylesheets/skeleton.css">
+	<link rel="stylesheet" href="http://composer.lightwerk.com/stylesheets/layout.css">
+	<link rel="stylesheet" href="http://composer.lightwerk.com/stylesheets/docs.css">
+
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	<!-- Favicons
+	================================================== -->
+	<link rel="shortcut icon" href="http://composer.lightwerk.com/images/favicon.ico">
 </head>
+<body>
 
-<h1>Feeds for TYPO3 CMS</h1>
 
-<p>
-	As experimentation, a Theme Manager for TYPO3 is under development and can be installed from <br />
-	<a href="https://github.com/typo3-themes/theme_manager">this repository</a>. Once installed, the Theme Manager will <br/>
-	consume	a data source containing a set of themes to be installed in TYPO3 CMS. The feed containing the repository can <br/> bee
-	seen here <a href="feed/typo3cms/v1/repositories.json">repositories.json</a>.
-</p>
 
+	<!-- Primary Page Layout
+	================================================== -->
+
+	<!-- Delete everything in this .container and get started on your own site! -->
+
+	<div class="container">
+		<div class="three columns sidebar">
+			<nav>
+				<ul>
+					<li><a href="#whatAndWhy">What &amp; Why</a></li>
+					<li><a href="#howToUse">How to use</a></li>
+					<li><a href="#howItWorks">How it works</a></li>
+					<li><a href="#thanks">Thanks</a></li>
+				</ul>
+			</nav>
+			&nbsp;
+		</div>
+		<div class="twelve columns offset-by-one content">
+			<header>
+				<h1>TYPO3 CMS Composer Repository</h1>
+
+			</header>
+			<hr class="large" />
+			<div class="doc-section" id="whatAndWhy">
+				<h3>What Is It?</h3>
+				<p>
+					This is a <a href="http://getcomposer.org/">composer</a> repository, enabling you to install TYPO3 CMS core and extensions including dependencies.
+					We think it's much nicer to build up your deployment on composer, rather than git submodules.
+				</p>
+				<p>This repository includes:
+					<ul class="square">
+						<li>TYPO3 CMS core<br /><small>All versions currently supported by <a href="http://typo3.org/download/">typo3.org</a></small></li>
+						<li>TYPO3 CMS extensions<br /><small>All Extensions, not marked as unsecure, in the <a href="http://typo3.org/extensions/repository/">TER</a></small></li>
+						<li>Composer Installer<br /><small>To install everyhing into it's right place (typo3conf/ext and typo3_src)</small></li>
+					</ul>
+				</p>
+				<p><small>You can also <a href="http://composer.typo3.org/index.html">list all available packages</a>.</small></p>
+			</div>
+			<hr />
+			<div class="doc-section" id="howToUse">
+				<h3>How to use</h3>
+				<p>Using composer to install TYPO3 CMS is really simple. You just need to include this repository into your composer.json like this.</p>
+				<script src="https://gist.github.com/foertel/6028006.js"></script>
+				<p>After you have done this, you can just require the core and / or extensions with the usual <a href="http://getcomposer.org/doc/04-schema.md#version">
+				composer versioning format</a>.</p>
+				<script src="https://gist.github.com/foertel/6028028.js"></script>
+				<p>This will allways get you the most current 6.1.x core of TYPO3 CMS, the most current version of a1_ttnews (including it's dependency tt_news!).</p>
+				<p>That's it! Really ... just <a href="http://composer.typo3.org/composer.json">download the demo</a>, run composer.json and be amazed.</p>
+			</div>
+			<hr />
+			<div class="doc-section" id="howItWorks">
+				<h3>How it works</h3>
+				<p>
+					Four times a day we crawl the TYPO3 Extension Repository and the available core downloads. We process all ext_emconf.php's (of every non-unsecure version)
+					to calculate the dependencies. Thus making sure you allways get matching version numbers.
+				</p>
+				<p>
+					We generate the metadata (packages.json), needed by composer to find the right downloads. We don't host anything ourself, but only link to the
+					right resources. Everything downloads directly from typo3.org, so you can be sure, to only get the best stuff.
+				</p>
+			</div>
+			<hr />
+			<div class="doc-section" id="thanks">
+				<h3>Thanks ...</h3>
+				<p>We put a lot of work into this, but that would not have been possible without the groundwork of:
+					<ul class="square">
+						<li><a href="http://getcomposer.org/">Composer</a> - for giving us ... well ... composer</li>
+						<li><a href="http://www.dkd.de/">Sascha Egerer of d.k.d.</a> - for writing the <a href="https://github.com/sascha-egerer/composer-downloader">T3X Downloader</a></li>
+					</ul>
+				</p>
+				<p>This project is maintained by <a href="http://www.lightwerk.de">Lightwerk Internetagentur</a>. Get in touch for support with your agency's deployment, including Gitlab CI, TYPO3.Surf and private repositories ...</p>
+				<p><img src="http://www.lightwerk.de/typo3temp/fl_realurl_image/lightwerk-gmbh-lw0.png" /></p>
+			</div>
+		</div>
+	</div>
+
+
+		</div>
+	</div><!-- container -->
+
+
+<!-- End Document
+================================================== -->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-42555597-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
 </html>
