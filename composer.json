@@ -1,0 +1,30 @@
+{
+	"name": "typo3/CmsComposerPackageGenerator",
+	"description": "Script for generating TYPO3 CMS packages",
+	"keywords": ["composer", "typo3"],
+	"homepage": "http://composer.typo3.org",
+	"authors": [
+		{
+			"name": "Lars Peipmann",
+			"email": "lars@peipmann.de"
+		},
+		{
+			"name": "Fabien Udriot",
+			"email": "fabien.udriot@typo3.org"
+		}
+	],
+	"require": {
+		"phing/phing": "dev-master"
+	},
+	"autoload": {
+		"psr-0": {
+			"PackageMaker": "Classes/"
+		}
+	},
+	"config": {
+		"bin-dir": "bin/"
+	},
+	"bin": ["vendor/phing/phing/bin/phing"]
+}
+
+
