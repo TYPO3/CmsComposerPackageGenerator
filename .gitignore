@@ -1,8 +1,6 @@
-/packages/
-/temp/
-
 .DS_Store
 .idea
-vendor
-bin/*
 
+/vendor
+/bin/*
+/Web/packages*
