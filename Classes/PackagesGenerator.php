@@ -2,18 +2,31 @@
 
 class PackagesGenerator {
 
-	protected $filePath = 'packages/packages.json';
+	const JSON_FILE_PATH = '../Web/packages.json';
 
-	protected $packagesPattern = 'packages/packages-*.json';
+	const JSON_PACKAGES_PATTERN = '../Web/packages-*.json';
 
+	/**
+	 * @return void
+	 */
 	public function save() {
-		file_put_contents($this->filePath, json_encode($this->getContent()));
+		file_put_contents($this->getJsonFilePath(), json_encode($this->getContent()));
 	}
 
-	protected function getFiles() {
-		return glob($this->packagesPattern);
+	/**
+	 * @return array
+	 */
+	protected function getContent() {
+		return array(
+//			'notify-batch' => '/downloads/',
+			'includes' => $this->getIncludes($this->getFiles())
+		);
 	}
 
+	/**
+	 * @param $files
+	 * @return array
+	 */
 	protected function getIncludes($files) {
 		$includes = array();
 		foreach ($files as $file) {
@@ -25,10 +38,34 @@ class PackagesGenerator {
 		return $includes;
 	}
 
-	protected function getContent() {
-		return array(
-			'notify-batch' => '/downloads/',
-			'includes' => $this->getIncludes($this->getFiles())
-		);
+	/**
+	 * @return array
+	 */
+	protected function getFiles() {
+		return glob($this->getJsonPackagesPattern());
+	}
+
+	/**
+	 * @return string
+	 */
+	protected function getJsonFilePath() {
+		return $this->getScriptRelativeFilePath($this::JSON_FILE_PATH);
+	}
+
+	/**
+	 * @return string
+	 */
+	protected function getJsonPackagesPattern() {
+		return $this->getScriptRelativeFilePath($this::JSON_PACKAGES_PATTERN);
+	}
+
+	/**
+	 * @return string
+	 */
+	protected function getScriptRelativeFilePath($filePath) {
+		if ($filePath{0} !== '/') {
+			$filePath = dirname($_SERVER['PHP_SELF']) . '/' . $filePath;
+		}
+		return $filePath;
 	}
 }

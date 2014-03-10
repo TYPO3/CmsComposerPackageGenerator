@@ -5,7 +5,15 @@ require('PackagesGenerator.php');
 
 class PackagesTYPO3ExtensionsGenerator {
 
-	protected $jsonFilePath = 'packages/packages-TYPO3Extensions-{type}.json';
+	const TER_XML_PATH = 'http://typo3.org/fileadmin/ter/extensions.xml.gz';
+
+	const PACKAGE_NAME_PREFIX = 'typo3/cms-';
+
+	const PACKAGE_TYPE = 'typo3-cms-extension';
+
+	const INSTALLER_PACKAGE_NAME = 'typo3/cms-extension-installer';
+
+	const JSON_FILE_PATH = '../Web/packages-TYPO3Extensions-{type}.json';
 
 	protected $extensions;
 
@@ -20,9 +28,12 @@ class PackagesTYPO3ExtensionsGenerator {
 		}
 	}
 
+	/**
+	 * @return SimpleXMLElement[]
+	 */
 	protected function getExtensions() {
 		if (!isset($this->extensions)) {
-			exec('wget -O- http://typo3.org/fileadmin/ter/extensions.xml.gz | gzip -d', $output);
+			exec('wget -O- ' . escapeshellarg($this::TER_XML_PATH) . ' | gzip -d', $output);
 			$extensionsObject = new SimpleXMLElement(implode(PHP_EOL, $output));
 			$this->extensions = $extensionsObject->extension;
 			$this->initExtensionKeys($this->extensions);
@@ -30,12 +41,20 @@ class PackagesTYPO3ExtensionsGenerator {
 		return $this->extensions;
 	}
 
+	/**
+	 * @param SimpleXMLElement[] $extensions
+	 * @return void
+	 */
 	protected function initExtensionKeys($extensions) {
 		foreach ($extensions as $extension) {
 			$this->extensionKeys[(string) $extension['extensionkey']] = $extension['extensionkey'];
 		}
 	}
 
+	/**
+	 * @param SimpleXMLElement[] $extensions
+	 * @return array
+	 */
 	protected function getPackages($extensions) {
 		$packages = array();
 		$quarter = mktime(0, 0, 0, floor((date('m') - 1) / 3) * 3 + 1, 1, date('Y'));
@@ -60,12 +79,17 @@ class PackagesTYPO3ExtensionsGenerator {
 		return $packages;
 	}
 
-	protected function getPackageArray($extension, $version) {
+	/**
+	 * @param SimpleXMLElement $extension
+	 * @param SimpleXMLElement $version
+	 * @return array
+	 */
+	protected function getPackageArray(SimpleXMLElement $extension, SimpleXMLElement $version) {
 		return array(
-			'name' => 'typo3-ter/' . (string) $extension['extensionkey'],
+			'name' =>  $this->getPackageName((string) $extension['extensionkey']),
 			'description' => (string) $version->description,
 			'version' => (string) $version['version'],
-			'type' => 'typo3cms-extension',
+			'type' => $this::PACKAGE_TYPE,
 			'time' => date('Y-m-d H:i:s', (int) $version->lastuploaddate),
 			'authors' => array(
 				array(
@@ -83,9 +107,13 @@ class PackagesTYPO3ExtensionsGenerator {
 		);
 	}
 
+	/**
+	 * @param array $dependencies
+	 * @return array
+	 */
 	protected function getRequire($dependencies) {
 		$require = array(
-			'lw/typo3cms-installers' => '*',
+			$this::INSTALLER_PACKAGE_NAME => '*',
 		);
 		foreach ($dependencies as $dependency) {
 			if (
@@ -116,14 +144,39 @@ class PackagesTYPO3ExtensionsGenerator {
 				$versionConstraint = '>= ' . $minVersion . ', <= ' . $maxVersion;
 			}
 
-			$require['typo3-ter/' . $dependency['extensionKey']] = $versionConstraint;
+			$require[$this->getPackageName($dependency['extensionKey'])] = $versionConstraint;
 		}
 		return $require;
 	}
 
+	/**
+	 * @param string $type
+	 * @param array $content
+	 * @return void
+	 */
 	protected function save($type, array $content) {
-		system('mkdir -p ' . escapeshellarg(dirname($this->jsonFilePath)));
-		file_put_contents(str_replace('{type}', $type, $this->jsonFilePath), json_encode($content));
+		file_put_contents($this->getJsonFilePath($type), json_encode($content));
+	}
+
+	/**
+	 * @param string $type
+	 * @return string
+	 */
+	protected function getJsonFilePath($type) {
+		$jsonFilePath = $this::JSON_FILE_PATH;
+		$jsonFilePath = str_replace('{type}', $type, $jsonFilePath);
+		if ($jsonFilePath{0} !== '/') {
+			$jsonFilePath = dirname($_SERVER['PHP_SELF']) . '/' . $jsonFilePath;
+		}
+		return $jsonFilePath;
+	}
+
+	/**
+	 * @param string $extensionKey
+	 * @return string
+	 */
+	protected function getPackageName($extensionKey) {
+		return $this::PACKAGE_NAME_PREFIX . str_replace('_', '-', $extensionKey);
 	}
 }
 
