@@ -61,7 +61,8 @@ class PackagesTYPO3ExtensionsGenerator {
 		foreach ($extensions as $extension) {
 			foreach ($extension->version as $version) {
 				if (!preg_match('/^[\d]+\.[\d]+\.[\d]+$/', $version['version'])) {
-					echo 'Extension ' . (string) $extension['extensionkey'] . ' has invalid version number "' . (string) $version['version'] . '"' . PHP_EOL;
+					// Ignore extensions with invalid version numbers
+					//echo 'Extension ' . (string) $extension['extensionkey'] . ' has invalid version number "' . (string) $version['version'] . '"' . PHP_EOL;
 					continue;
 				}
 				if ((int) $version->reviewstate === -1) {
