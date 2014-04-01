@@ -33,7 +33,7 @@ class PackagesTYPO3ExtensionsGenerator {
 	 */
 	protected function getExtensions() {
 		if (!isset($this->extensions)) {
-			exec('wget -O- ' . escapeshellarg($this::TER_XML_PATH) . ' | gzip -d', $output);
+			exec('wget -q -O- ' . escapeshellarg($this::TER_XML_PATH) . ' | gzip -d', $output);
 			$extensionsObject = new SimpleXMLElement(implode(PHP_EOL, $output));
 			$this->extensions = $extensionsObject->extension;
 			$this->initExtensionKeys($this->extensions);
