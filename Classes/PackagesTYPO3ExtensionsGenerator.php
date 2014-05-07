@@ -7,7 +7,7 @@ class PackagesTYPO3ExtensionsGenerator {
 
 	const TER_XML_PATH = 'http://typo3.org/fileadmin/ter/extensions.xml.gz';
 
-	const PACKAGE_NAME_PREFIX = 'typo3/cms-';
+	const PACKAGE_NAME_PREFIX = 'typo3-ter/';
 
 	const PACKAGE_TYPE = 'typo3-cms-extension';
 
