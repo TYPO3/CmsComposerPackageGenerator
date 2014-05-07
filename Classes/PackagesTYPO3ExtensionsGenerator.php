@@ -11,8 +11,6 @@ class PackagesTYPO3ExtensionsGenerator {
 
 	const PACKAGE_TYPE = 'typo3-cms-extension';
 
-	const INSTALLER_PACKAGE_NAME = 'typo3/cms-extension-installer';
-
 	const JSON_FILE_PATH = '../Web/packages-TYPO3Extensions-{type}.json';
 
 	protected $extensions;
@@ -117,9 +115,7 @@ class PackagesTYPO3ExtensionsGenerator {
 	 * @return array
 	 */
 	protected function getRequire($dependencies) {
-		$require = array(
-			$this::INSTALLER_PACKAGE_NAME => '*',
-		);
+		$require = array();
 		foreach ($dependencies as $dependency) {
 			if (
 				$dependency['kind'] !== 'depends'
