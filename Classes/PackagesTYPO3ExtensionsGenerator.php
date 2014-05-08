@@ -68,6 +68,11 @@ class PackagesTYPO3ExtensionsGenerator {
 				}
 
 				$package = $this->getPackageArray($extension, $version);
+
+				if (!isset($package['require']['typo3/cms'])) {
+					continue;
+				}
+
 				if ($quarter < (int) $version->lastuploaddate) {
 					$packages['quarter'][$package['name']][$package['version']] = $package;
 				} else {
@@ -84,7 +89,7 @@ class PackagesTYPO3ExtensionsGenerator {
 	 * @return array
 	 */
 	protected function getPackageArray(SimpleXMLElement $extension, SimpleXMLElement $version) {
-		return array(
+		return array_merge(array(
 			'name' =>  $this->getPackageName((string) $extension['extensionkey']),
 			'description' => (string) $version->description,
 			'version' => (string) $version['version'],
@@ -97,16 +102,18 @@ class PackagesTYPO3ExtensionsGenerator {
 					'company' => (string) $version->authorcompany,
 					'username' => (string) $version->ownerusername,
 				)
-			),
-			'require' => $this->getRequire(unserialize((string) $version->dependencies)),
-			'replace' => array(
-				(string) $extension['extensionkey'] => (string) $version['version'],
-				'typo3-ext/' . (string) $extension['extensionkey'] => (string) $version['version'],
-			),
-			'dist' => array(
-				'url' => 'http://typo3.org/extensions/repository/download/' . $extension['extensionkey'] . '/' . $version['version'] . '/t3x/',
-				'type' => 't3x',
-			),
+			)),
+			$this->getPackageLinks(unserialize((string) $version->dependencies)),
+			array(
+				'replace' => array(
+					(string) $extension['extensionkey'] => (string) $version['version'],
+					'typo3-ext/' . (string) $extension['extensionkey'] => (string) $version['version'],
+				),
+				'dist' => array(
+					'url' => 'http://typo3.org/extensions/repository/download/' . $extension['extensionkey'] . '/' . $version['version'] . '/t3x/',
+					'type' => 't3x',
+				),
+			)
 		);
 	}
 
@@ -114,12 +121,28 @@ class PackagesTYPO3ExtensionsGenerator {
 	 * @param array $dependencies
 	 * @return array
 	 */
-	protected function getRequire($dependencies) {
-		$require = array();
+	protected function getPackageLinks($dependencies) {
+		$packageLinks = array();
 		foreach ($dependencies as $dependency) {
-			if (
-				$dependency['kind'] !== 'depends'
-				|| !isset($this->extensionKeys[$dependency['extensionKey']])
+			$linkType = '';
+			switch ($dependency['kind']) {
+				case 'depends':
+					$linkType = 'require';
+					break;
+				case 'conflicts':
+					$linkType = 'conflict';
+					break;
+				case 'suggests':
+					$linkType = 'suggest';
+					break;
+				default:
+					continue;
+					break;
+			}
+
+			if ($dependency['extensionKey'] !== 'php'
+				&& $dependency['extensionKey'] !== 'typo3'
+				&& !isset($this->extensionKeys[$dependency['extensionKey']])
 			) {
 				continue;
 			}
@@ -128,12 +151,12 @@ class PackagesTYPO3ExtensionsGenerator {
 			$minVersion = trim($requiredVersion[0]);
 			$maxVersion = (isset($requiredVersion[1]) ? trim($requiredVersion[1]) : '');
 
-			if (
-				(
+			if ((
 					(empty($minVersion) || $minVersion === '0.0.0' || $minVersion === '*')
 					&& (empty($maxVersion) || $maxVersion === '0.0.0' || $maxVersion === '*')
 				)
-				|| !preg_match('/^([\d]\.[\d]\.[\d])*(\-)*([\d]\.[\d]\.[\d])*$/', $dependency['versionRange'])) {
+				|| !preg_match('/^([\d]+\.[\d]+\.[\d]+)*(\-)*([\d]+\.[\d]+\.[\d]+)*$/', $dependency['versionRange'])
+			) {
 				$versionConstraint = '*';
 			} elseif ($maxVersion === '0.0.0' || empty($maxVersion)) {
 				$versionConstraint = '>= ' . $minVersion;
@@ -145,9 +168,9 @@ class PackagesTYPO3ExtensionsGenerator {
 				$versionConstraint = '>= ' . $minVersion . ', <= ' . $maxVersion;
 			}
 
-			$require[$this->getPackageName($dependency['extensionKey'])] = $versionConstraint;
+			$packageLinks[$linkType][$this->getPackageName($dependency['extensionKey'])] = $versionConstraint;
 		}
-		return $require;
+		return $packageLinks;
 	}
 
 	/**
@@ -177,7 +200,14 @@ class PackagesTYPO3ExtensionsGenerator {
 	 * @return string
 	 */
 	protected function getPackageName($extensionKey) {
-		return $this::PACKAGE_NAME_PREFIX . str_replace('_', '-', $extensionKey);
+		switch ($extensionKey) {
+			case 'php':
+				return 'php';
+			case 'typo3':
+				return 'typo3/cms';
+			default:
+				return $this::PACKAGE_NAME_PREFIX . str_replace('_', '-', $extensionKey);
+		}
 	}
 }
 
