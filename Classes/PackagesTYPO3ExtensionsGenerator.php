@@ -106,8 +106,8 @@ class PackagesTYPO3ExtensionsGenerator {
 			$this->getPackageLinks(unserialize((string) $version->dependencies)),
 			array(
 				'replace' => array(
-					(string) $extension['extensionkey'] => (string) $version['version'],
-					'typo3-ext/' . (string) $extension['extensionkey'] => (string) $version['version'],
+					(string) $extension['extensionkey'] => 'self.version',
+					'typo3-ext/' . (string) $extension['extensionkey'] => 'self.version',
 				),
 				'dist' => array(
 					'url' => 'http://typo3.org/extensions/repository/download/' . $extension['extensionkey'] . '/' . $version['version'] . '/t3x/',
