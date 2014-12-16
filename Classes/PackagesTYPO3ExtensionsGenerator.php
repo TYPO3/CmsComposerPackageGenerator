@@ -89,22 +89,21 @@ class PackagesTYPO3ExtensionsGenerator {
 	 * @return array
 	 */
 	protected function getPackageArray(SimpleXMLElement $extension, SimpleXMLElement $version) {
-		return array_merge(array(
-			'name' =>  $this->getPackageName((string) $extension['extensionkey']),
-			'description' => (string) $version->description,
-			'version' => (string) $version['version'],
-			'type' => $this::PACKAGE_TYPE,
-			'time' => date('Y-m-d H:i:s', (int) $version->lastuploaddate),
-			'authors' => array(
-				array(
-					'name' => (string) $version->authorname,
-					'email' => (string) $version->authoremail,
-					'company' => (string) $version->authorcompany,
-					'username' => (string) $version->ownerusername,
-				)
-			)),
-			$this->getPackageLinks(unserialize((string) $version->dependencies)),
+		return array_merge(
 			array(
+				'name' => $this->getPackageName((string) $extension['extensionkey']),
+				'description' => (string) $version->description,
+				'version' => (string) $version['version'],
+				'type' => $this::PACKAGE_TYPE,
+				'time' => date('Y-m-d H:i:s', (int) $version->lastuploaddate),
+				'authors' => array(
+					array(
+						'name' => (string) $version->authorname,
+						'email' => (string) $version->authoremail,
+						'company' => (string) $version->authorcompany,
+						'username' => (string) $version->ownerusername,
+					)
+				),
 				'replace' => array(
 					(string) $extension['extensionkey'] => 'self.version',
 					'typo3-ext/' . (string) $extension['extensionkey'] => 'self.version',
@@ -113,7 +112,8 @@ class PackagesTYPO3ExtensionsGenerator {
 					'url' => 'http://typo3.org/extensions/repository/download/' . $extension['extensionkey'] . '/' . $version['version'] . '/t3x/',
 					'type' => 't3x',
 				),
-			)
+			),
+			$this->getPackageLinks(unserialize((string) $version->dependencies))
 		);
 	}
 
