@@ -89,32 +89,37 @@ class PackagesTYPO3ExtensionsGenerator {
 	 * @return array
 	 */
 	protected function getPackageArray(SimpleXMLElement $extension, SimpleXMLElement $version) {
-		return array_merge(
-			array(
-				'name' => $this->getPackageName((string) $extension['extensionkey']),
-				'description' => (string) $version->description,
-				'version' => (string) $version['version'],
-				'type' => $this::PACKAGE_TYPE,
-				'time' => date('Y-m-d H:i:s', (int) $version->lastuploaddate),
-				'authors' => array(
-					array(
-						'name' => (string) $version->authorname,
-						'email' => (string) $version->authoremail,
-						'company' => (string) $version->authorcompany,
-						'username' => (string) $version->ownerusername,
-					)
-				),
-				'replace' => array(
-					(string) $extension['extensionkey'] => 'self.version',
-					$this::PACKAGE_NAME_PREFIX . (string) $extension['extensionkey'] => 'self.version',
-				),
-				'dist' => array(
-					'url' => 'http://typo3.org/extensions/repository/download/' . $extension['extensionkey'] . '/' . $version['version'] . '/t3x/',
-					'type' => 't3x',
-				),
+		$packageArray = array(
+			'name' => $this->getPackageName((string) $extension['extensionkey']),
+			'description' => (string) $version->description,
+			'version' => (string) $version['version'],
+			'type' => $this::PACKAGE_TYPE,
+			'time' => date('Y-m-d H:i:s', (int) $version->lastuploaddate),
+			'authors' => array(
+				array(
+					'name' => (string) $version->authorname,
+					'email' => (string) $version->authoremail,
+					'company' => (string) $version->authorcompany,
+					'username' => (string) $version->ownerusername,
+				)
 			),
+			'dist' => array(
+				'url' => 'http://typo3.org/extensions/repository/download/' . $extension['extensionkey'] . '/' . $version['version'] . '/t3x/',
+				'type' => 't3x',
+			),
+		);
+
+		$packageArray = array_merge(
+			$packageArray,
 			$this->getPackageLinks(unserialize((string) $version->dependencies))
 		);
+
+		$alternativeName = $this::PACKAGE_NAME_PREFIX . (string) $extension['extensionkey'];
+		if ($alternativeName !== $packageArray['name']) {
+			$packageArray['provide'][$alternativeName] = 'self.version';
+		}
+
+		return $packageArray;
 	}
 
 	/**
