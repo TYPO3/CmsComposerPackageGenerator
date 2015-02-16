@@ -24,6 +24,11 @@
 			"Classes/"
 		]
 	},
+	"autoload-dev": {
+		"classmap": [
+			"Tests/"
+		]
+	},
 	"config": {
 		"bin-dir": "bin/"
 	},
