@@ -2,9 +2,9 @@
 
 class PackagesGenerator {
 
-	const JSON_FILE_PATH = '../Web/packages.json';
+	const JSON_FILE_PATH = './Web/packages.json';
 
-	const JSON_PACKAGES_PATTERN = '../Web/packages-*.json';
+	const JSON_PACKAGES_PATTERN = './Web/packages-*.json';
 
 	/**
 	 * @return void
