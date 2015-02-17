@@ -1,7 +1,4 @@
-#! /usr/bin/env php
 <?php
-
-require('PackagesGenerator.php');
 
 class PackagesTYPO3ExtensionsGenerator {
 
@@ -11,7 +8,7 @@ class PackagesTYPO3ExtensionsGenerator {
 
 	const PACKAGE_TYPE = 'typo3-cms-extension';
 
-	const JSON_FILE_PATH = '../Web/packages-TYPO3Extensions-{type}.json';
+	const JSON_FILE_PATH = './Web/packages-TYPO3Extensions-{type}.json';
 
 	protected $extensions;
 
@@ -215,8 +212,3 @@ class PackagesTYPO3ExtensionsGenerator {
 		}
 	}
 }
-
-new PackagesTYPO3ExtensionsGenerator();
-
-$packagesGenerator = new PackagesGenerator();
-$packagesGenerator->save();

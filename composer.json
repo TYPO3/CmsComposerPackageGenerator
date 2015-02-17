@@ -16,10 +16,18 @@
 	"require": {
 		"phing/phing": "dev-master"
 	},
+	"require-dev": {
+		"phpunit/phpunit": "~4.5"
+	},
 	"autoload": {
-		"psr-0": {
-			"PackageMaker": "Classes/"
-		}
+		"classmap": [
+			"Classes/"
+		]
+	},
+	"autoload-dev": {
+		"classmap": [
+			"Tests/"
+		]
 	},
 	"config": {
 		"bin-dir": "bin/"
