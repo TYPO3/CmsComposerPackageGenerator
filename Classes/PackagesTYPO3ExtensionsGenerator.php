@@ -104,6 +104,9 @@ class PackagesTYPO3ExtensionsGenerator {
 				'url' => 'http://typo3.org/extensions/repository/download/' . $extension['extensionkey'] . '/' . $version['version'] . '/t3x/',
 				'type' => 't3x',
 			),
+			'autoload' => array(
+				'classmap' => array('')
+			)
 		);
 
 		$packageArray = array_merge(
