@@ -60,9 +60,6 @@ class PackagesTYPO3ExtensionsGenerator {
 					//echo 'Extension ' . (string) $extension['extensionkey'] . ' has invalid version number "' . (string) $version['version'] . '"' . PHP_EOL;
 					continue;
 				}
-				if ((int) $version->reviewstate === -1) {
-					continue;
-				}
 
 				$package = $this->getPackageArray($extension, $version);
 
@@ -106,6 +103,9 @@ class PackagesTYPO3ExtensionsGenerator {
 			),
 			'autoload' => array(
 				'classmap' => array('')
+			),
+			'extra' => array(
+				'secure' => ((int) $version->reviewstate !== -1)
 			)
 		);
 
