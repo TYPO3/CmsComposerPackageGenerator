@@ -33,11 +33,9 @@ class PackagesTYPO3ExtensionsGeneratorTest extends BaseTestCase {
 	public function reviewStatesArePopulatedAsSecureKeyInExtraSection() {
 		$packages = $this->generator->_call('getPackages', $this->fixture);
 
-		$this->assertTrue(isset($packages['archive']['typo3-ter/gridelements']['2.0.0']['extra']['secure']));
-		$this->assertFalse($packages['archive']['typo3-ter/gridelements']['2.0.0']['extra']['secure']);
+		$this->assertTrue(isset($packages['archive']['typo3-ter/gridelements']['2.0.0']['extra']['typo3/ter']['reviewstate']));
+		$this->assertSame('insecure', $packages['archive']['typo3-ter/gridelements']['2.0.0']['extra']['typo3/ter']['reviewstate']);
 
-
-		$this->assertTrue(isset($packages['archive']['typo3-ter/gridelements']['3.0.0']['extra']['secure']));
-		$this->assertTrue($packages['archive']['typo3-ter/gridelements']['3.0.0']['extra']['secure']);
+		$this->assertFalse(isset($packages['archive']['typo3-ter/gridelements']['2.0.0']['extra']['typo3/ter']['extra']['reviewstate']));
 	}
 }

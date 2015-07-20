@@ -103,10 +103,12 @@ class PackagesTYPO3ExtensionsGenerator {
 			),
 			'autoload' => array(
 				'classmap' => array('')
-			),
-			'extra' => array(
-				'secure' => ((int) $version->reviewstate !== -1)
 			)
+		);
+
+		$packageArray = array_merge(
+			$packageArray,
+			$this->evaluateReviewState($version->reviewstate)
 		);
 
 		$packageArray = array_merge(
@@ -213,5 +215,23 @@ class PackagesTYPO3ExtensionsGenerator {
 			default:
 				return $this::PACKAGE_NAME_PREFIX . str_replace('_', '-', $extensionKey);
 		}
+	}
+
+	/**
+	 * @param int $reviewstate
+	 * @return array
+	 */
+	protected function evaluateReviewState($reviewstate) {
+		$return = array();
+
+		if ((int) $reviewstate === -1) {
+			$return['extra'] = array(
+				'typo3/ter' => array(
+					'reviewstate' => 'insecure'
+				)
+			);
+		}
+
+		return $return;
 	}
 }
