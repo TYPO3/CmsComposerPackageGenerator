@@ -14,15 +14,21 @@
 		}
 	],
 	"require": {
-		"phing/phing": "dev-master"
+		"phing/phing": "dev-master",
+		"composer/satis": "~1.0@alpha",
+		"guzzlehttp/guzzle": "3.8.1",
+		"symfony/console": "2.6.11",
+		"webmozart/json": "~1.0"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "~4.5"
+		"phpunit/phpunit": "~4.5",
+		"symfony/var-dumper": "2.6.11"
 	},
 	"autoload": {
-		"classmap": [
-			"Classes/"
-		]
+		"psr-4": {
+			"TYPO3\\Composer\\": "src/Classes/"
+		},
+		"files": ["src/Classes/PackagesTYPO3ExtensionsGenerator.php"]
 	},
 	"autoload-dev": {
 		"classmap": [
@@ -32,7 +38,8 @@
 	"config": {
 		"bin-dir": "bin/"
 	},
-	"bin": ["vendor/phing/phing/bin/phing"]
+	"bin": ["vendor/phing/phing/bin/phing"],
+	"minimum-stability": "dev"
 }
 
 
