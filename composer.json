@@ -39,7 +39,7 @@
 		"bin-dir": "bin/"
 	},
 	"bin": ["vendor/phing/phing/bin/phing"],
-	"minimum-stability": "dev"
+	"minimum-stability": "alpha"
 }
 
 
