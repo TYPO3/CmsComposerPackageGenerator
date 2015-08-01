@@ -2,6 +2,24 @@
 <extensions>
 	<extension extensionkey="gridelements">
 		<downloadcounter>645</downloadcounter>
+		<version version="2.0.0">
+			<title>Grid Elements</title>
+			<description>This extension integrates the grid layout concept also to regular content elements - the grid elements.&#13;
+				It offers a lot of new features like advanced drag &amp; drop or real references, that improve the usability of the page and list module to speed up the daily work with the backend.
+			</description>
+			<state>beta</state>
+			<reviewstate>-1</reviewstate>
+			<category>be</category>
+			<downloadcounter>0</downloadcounter>
+			<lastuploaddate>1407675936</lastuploaddate>
+			<uploadcomment>Lots of fixes to make Gridelements work with the new layout and design of the TYPO3 6.2 backend. Workspaces are still an issue we are working on, but the rest should be working fine. Have fun!</uploadcomment>
+			<dependencies>a:6:{i:0;a:3:{s:4:"kind";s:7:"depends";s:12:"extensionKey";s:3:"cms";s:12:"versionRange";s:0:"";}i:1;a:3:{s:4:"kind";s:7:"depends";s:12:"extensionKey";s:7:"version";s:12:"versionRange";s:0:"";}i:2;a:3:{s:4:"kind";s:7:"depends";s:12:"extensionKey";s:3:"php";s:12:"versionRange";s:11:"5.3.7-0.0.0";}i:3;a:3:{s:4:"kind";s:7:"depends";s:12:"extensionKey";s:5:"typo3";s:12:"versionRange";s:12:"6.2.0-6.2.99";}i:4;a:3:{s:4:"kind";s:9:"conflicts";s:12:"extensionKey";s:11:"templavoila";s:12:"versionRange";s:0:"";}i:5;a:3:{s:4:"kind";s:9:"conflicts";s:12:"extensionKey";s:14:"jfmulticontent";s:12:"versionRange";s:0:"";}}</dependencies>
+			<authorname>Grid Elements Team</authorname>
+			<authoremail>info@cybercraft.de</authoremail>
+			<authorcompany />
+			<ownerusername>cybercraft</ownerusername>
+			<t3xfilemd5>67f39a57294c2556820a69bd9a2cc156</t3xfilemd5>
+		</version>
 		<version version="3.0.0">
 			<title>Grid Elements</title>
 			<description>This extension integrates the grid layout concept also to regular content elements - the grid elements.&#13;

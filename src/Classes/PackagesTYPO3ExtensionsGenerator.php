@@ -60,9 +60,6 @@ class PackagesTYPO3ExtensionsGenerator {
 					//echo 'Extension ' . (string) $extension['extensionkey'] . ' has invalid version number "' . (string) $version['version'] . '"' . PHP_EOL;
 					continue;
 				}
-				if ((int) $version->reviewstate === -1) {
-					continue;
-				}
 
 				$package = $this->getPackageArray($extension, $version);
 
@@ -107,6 +104,11 @@ class PackagesTYPO3ExtensionsGenerator {
 			'autoload' => array(
 				'classmap' => array('')
 			)
+		);
+
+		$packageArray = array_merge(
+			$packageArray,
+			$this->evaluateReviewState($version->reviewstate)
 		);
 
 		$packageArray = array_merge(
@@ -213,5 +215,23 @@ class PackagesTYPO3ExtensionsGenerator {
 			default:
 				return $this::PACKAGE_NAME_PREFIX . str_replace('_', '-', $extensionKey);
 		}
+	}
+
+	/**
+	 * @param int $reviewstate
+	 * @return array
+	 */
+	protected function evaluateReviewState($reviewstate) {
+		$return = array();
+
+		if ((int) $reviewstate === -1) {
+			$return['extra'] = array(
+				'typo3/ter' => array(
+					'reviewstate' => 'insecure'
+				)
+			);
+		}
+
+		return $return;
 	}
 }

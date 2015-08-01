@@ -22,3 +22,7 @@ File structure
 	├── Data      -> Temporary files
 	├── Web       -> Files visible by the outside world
 	├── build.xml -> Phing tasks
+
+Run the unit tests
+==================
+./bin/phpunit -c ./Build/UnitTests.xml [--colors]

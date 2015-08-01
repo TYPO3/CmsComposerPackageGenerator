@@ -26,4 +26,16 @@ class PackagesTYPO3ExtensionsGeneratorTest extends BaseTestCase {
 		$this->assertTrue(isset($packages['archive']['typo3-ter/gridelements']['3.0.0']['require']));
 		$this->assertFalse(isset($packages['archive']['typo3-ter/gridelements']['3.0.0']['require']['typo3-ter/version']));
 	}
+
+	/**
+	 * @test
+	 */
+	public function reviewStatesArePopulatedAsSecureKeyInExtraSection() {
+		$packages = $this->generator->_call('getPackages', $this->fixture);
+
+		$this->assertTrue(isset($packages['archive']['typo3-ter/gridelements']['2.0.0']['extra']['typo3/ter']['reviewstate']));
+		$this->assertSame('insecure', $packages['archive']['typo3-ter/gridelements']['2.0.0']['extra']['typo3/ter']['reviewstate']);
+
+		$this->assertFalse(isset($packages['archive']['typo3-ter/gridelements']['2.0.0']['extra']['typo3/ter']['extra']['reviewstate']));
+	}
 }
