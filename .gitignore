@@ -4,4 +4,5 @@
 /vendor
 /bin/*
 /Web/packages*
+/Web/include/
 /satis.json
