@@ -36,11 +36,10 @@
 			"Tests/"
 		]
 	},
-	"bin": ["bin/typo3-cms-package-generator"],
+	"bin": ["bin/typo3-cms-package-generator","vendor/phing/phing/bin/phing"],
 	"config": {
 		"bin-dir": "bin/"
-	},
-	"bin": ["vendor/phing/phing/bin/phing"]
+	}
 }
 
 
