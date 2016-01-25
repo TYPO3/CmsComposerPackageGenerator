@@ -2,7 +2,7 @@
 
 class PackagesTYPO3ExtensionsGenerator {
 
-	const TER_XML_PATH = 'http://typo3.org/fileadmin/ter/extensions.xml.gz';
+	const TER_XML_PATH = 'https://typo3.org/fileadmin/ter/extensions.xml.gz';
 
 	const PACKAGE_NAME_PREFIX = 'typo3-ter/';
 
@@ -28,7 +28,7 @@ class PackagesTYPO3ExtensionsGenerator {
 	 */
 	protected function getExtensions() {
 		if (!isset($this->extensions)) {
-			exec('wget -q -O- ' . escapeshellarg($this::TER_XML_PATH) . ' | gzip -d', $output);
+			exec('wget --no-check-certificate -q -O- ' . escapeshellarg($this::TER_XML_PATH) . ' | gzip -d', $output);
 			$extensionsObject = new SimpleXMLElement(implode(PHP_EOL, $output));
 			$this->extensions = $extensionsObject->extension;
 			$this->initExtensionKeys($this->extensions);
