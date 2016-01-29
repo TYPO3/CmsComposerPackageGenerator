@@ -283,17 +283,17 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
     }
 
     /**
-     * @param int $reviewstate
+     * @param int $reviewState
      * @return array
      */
-    protected function evaluateReviewState($reviewstate)
+    protected function evaluateReviewState($reviewState)
     {
         $return = array();
 
-        if ((int)$reviewstate === -1) {
+        if ((int)$reviewState === -1) {
             $return['extra'] = array(
                 'typo3/ter' => array(
-                    'reviewstate' => 'insecure'
+                    'review-state' => 'insecure'
                 )
             );
         }
