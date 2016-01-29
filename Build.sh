@@ -1,6 +1,2 @@
-#! /usr/bin/env php
-<?php
-
-require __DIR__ . '/vendor/autoload.php';
-
-new PackagesTYPO3ExtensionsGenerator();
+#!/bin/sh
+bin/typo3-cms-package-generator extensions:ter:json:create

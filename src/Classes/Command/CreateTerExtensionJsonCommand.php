@@ -122,7 +122,7 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
 
                 $package = $this->getPackageArray($extension, $version);
 
-                if (!isset($package['require']['typo3/cms'])) {
+                if (!isset($package['require']['typo3/cms-core'])) {
                     continue;
                 }
 
@@ -147,7 +147,7 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
             'name' => $this->getPackageName((string)$extension['extensionkey']),
             'description' => (string)$version->description,
             'version' => (string)$version['version'],
-            'type' => $this::PACKAGE_TYPE,
+            'type' => self::PACKAGE_TYPE,
             'time' => date('Y-m-d H:i:s', (int)$version->lastuploaddate),
             'authors' => array(
                 array(
@@ -258,7 +258,7 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
      */
     protected function getJsonFilePath($type)
     {
-        $jsonFilePath = $this::JSON_FILE_PATH;
+        $jsonFilePath = self::JSON_FILE_PATH;
         $jsonFilePath = str_replace('{type}', $type, $jsonFilePath);
         if ($jsonFilePath{0} !== '/') {
             $jsonFilePath = dirname($_SERVER['PHP_SELF']) . '/' . $jsonFilePath;
