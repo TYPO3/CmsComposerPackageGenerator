@@ -14,7 +14,6 @@
 		}
 	],
 	"require": {
-		"phing/phing": "dev-master",
 		"composer/satis": "~1.0@alpha",
 		"composer/composer": "1.0.*@dev",
 		"guzzlehttp/guzzle": "3.8.1",
@@ -35,7 +34,7 @@
 			"Tests/"
 		]
 	},
-	"bin": ["bin/typo3-cms-package-generator","vendor/phing/phing/bin/phing"],
+	"bin": ["bin/typo3-cms-package-generator"],
 	"config": {
 		"bin-dir": "bin/"
 	}
