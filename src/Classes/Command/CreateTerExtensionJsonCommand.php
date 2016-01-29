@@ -278,7 +278,7 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
             case 'typo3':
                 return 'typo3/cms';
             default:
-                return $this::PACKAGE_NAME_PREFIX . str_replace('_', '-', $extensionKey);
+                return self::PACKAGE_NAME_PREFIX . str_replace('_', '-', $extensionKey);
         }
     }
 
