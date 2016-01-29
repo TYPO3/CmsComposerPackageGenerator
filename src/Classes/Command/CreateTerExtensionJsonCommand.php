@@ -176,7 +176,8 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
             $this->getPackageLinks(unserialize((string)$version->dependencies))
         );
 
-        $alternativeName = $this::PACKAGE_NAME_PREFIX . (string)$extension['extensionkey'];
+        $packageArray['replace'][(string)$extension['extensionkey']] = 'self.version';
+        $alternativeName = self::PACKAGE_NAME_PREFIX . (string)$extension['extensionkey'];
         if ($alternativeName !== $packageArray['name']) {
             $packageArray['replace'][$alternativeName] = 'self.version';
         }
