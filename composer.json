@@ -28,8 +28,7 @@
 	"autoload": {
 		"psr-4": {
 			"TYPO3\\Composer\\": "src/Classes/"
-		},
-		"files": ["src/Classes/PackagesTYPO3ExtensionsGenerator.php"]
+		}
 	},
 	"autoload-dev": {
 		"classmap": [

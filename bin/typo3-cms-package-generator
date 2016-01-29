@@ -17,5 +17,6 @@ require __DIR__ . '/../' . '/vendor/autoload.php';
 use Symfony\Component\Console\Application;
 
 $console = new Application();
+$console->add(new \TYPO3\Composer\Command\CreateTerExtensionJsonCommand());
 $console->add(new \TYPO3\Composer\Command\SatisCommand());
 $console->run();
