@@ -27,11 +27,6 @@ class SatisCommand extends \Symfony\Component\Console\Command\Command
 {
 
     /**
-     * @var string
-     */
-    const REPOSITORIES_URL = 'http://typo3.org/?eID=ter_fe2:extension&action=findAllWithRepositoryUrlAsPackageSource';
-
-    /**
      * @return void
      */
     protected function configure()
@@ -70,8 +65,7 @@ class SatisCommand extends \Symfony\Component\Console\Command\Command
                     'type' => 'composer',
                     'url' => 'file://' . $webroot . '/Web/packages-TYPO3Extensions-quarter.json'
                 )
-            ),
-            $this->fetchRepositories()
+            )
         );
 
         $satis = new SatisJson('TYPO3 Extension Repository');
@@ -86,37 +80,4 @@ class SatisCommand extends \Symfony\Component\Console\Command\Command
         }
     }
 
-    /**
-     * @return array
-     * @throws \Exception
-     * @throws \Webmozart\Json\ValidationFailedException
-     */
-    protected function fetchRepositories()
-    {
-        $client = new Client();
-        $request = $client->get(static::REPOSITORIES_URL);
-        $response = $request->send();
-        $responseBody = $response->getBody(true);
-
-        $jsonDecoder = new JsonDecoder();
-        $jsonDecoder->setObjectDecoding(JsonDecoder::ASSOC_ARRAY);
-
-        $json = $jsonDecoder->decode($responseBody);
-
-        if (null !== $json['meta']) {
-            throw new \Exception($json['meta']['error']);
-        }
-
-        $repositories = array();
-        if (is_array($json['data'])) {
-            foreach ($json['data'] as $extKey => $extData) {
-                $repositories[] = array(
-                    'type' => 'vcs',
-                    'url' => $extData['repository_clone_url']
-                );
-            }
-        }
-
-        return $repositories;
-    }
 }
