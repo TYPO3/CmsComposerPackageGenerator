@@ -162,7 +162,8 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
                 'type' => 't3x',
             ),
             'autoload' => array(
-                'classmap' => array('')
+                'classmap' => array(''),
+                'exclude-from-classmap' => array('Tests', 'tests', 'Resources', 'class.ext_update.php'),
             )
         );
 
