@@ -47,9 +47,9 @@ class CreateTerExtensionJsonCommandTest extends \TYPO3\Composer\Tests\Unit\BaseT
 	public function reviewStatesArePopulatedAsSecureKeyInExtraSection() {
 		$packages = $this->command->_call('getPackages', $this->fixture);
 
-		$this->assertTrue(isset($packages['archive']['typo3-ter/gridelements']['2.0.0']['extra']['typo3/ter']['reviewstate']));
-		$this->assertSame('insecure', $packages['archive']['typo3-ter/gridelements']['2.0.0']['extra']['typo3/ter']['reviewstate']);
+		$this->assertTrue(isset($packages['archive']['typo3-ter/gridelements']['2.0.0']['extra']['typo3/ter']['review-state']));
+		$this->assertSame('insecure', $packages['archive']['typo3-ter/gridelements']['2.0.0']['extra']['typo3/ter']['review-state']);
 
-		$this->assertFalse(isset($packages['archive']['typo3-ter/gridelements']['2.0.0']['extra']['typo3/ter']['extra']['reviewstate']));
+		$this->assertFalse(isset($packages['archive']['typo3-ter/gridelements']['2.0.0']['extra']['typo3/ter']['extra']['review-state']));
 	}
 }
