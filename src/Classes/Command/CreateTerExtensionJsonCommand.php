@@ -143,6 +143,16 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
      */
     protected function getPackageArray(\SimpleXMLElement $extension, \SimpleXMLElement $version)
     {
+        $autoload = array(
+            'classmap' => array(''),
+            'exclude-from-classmap' => array('Tests', 'tests', 'class.ext_update.php'),
+        );
+        if (!empty($version->composerinfo)) {
+            $composerInfo = json_decode((string)$version->composerinfo, true);
+            if (!empty($composerInfo['autoload'])) {
+                $autoload = $composerInfo['autoload'];
+            }
+        }
         $packageArray = array(
             'name' => $this->getPackageName((string)$extension['extensionkey']),
             'description' => (string)$version->description,
@@ -161,10 +171,7 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
                 'url' => 'https://typo3.org/extensions/repository/download/' . $extension['extensionkey'] . '/' . $version['version'] . '/t3x/',
                 'type' => 't3x',
             ),
-            'autoload' => array(
-                'classmap' => array(''),
-                'exclude-from-classmap' => array('Tests', 'tests', 'Resources', 'class.ext_update.php'),
-            )
+            'autoload' => $autoload
         );
 
         $packageArray = array_merge(
