@@ -107,6 +107,14 @@ class SatisJson
     }
 
     /**
+     * @return void
+     */
+    public function useProviders()
+    {
+        $this->data['providers'] = true;
+    }
+
+    /**
      * @return string
      */
     public function __toString()

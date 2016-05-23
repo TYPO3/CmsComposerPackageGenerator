@@ -14,8 +14,7 @@
 		}
 	],
 	"require": {
-		"composer/satis": "~1.0@alpha",
-		"composer/composer": "1.0.*@dev",
+		"composer/satis": "dev-master#c41456ad18a5b104ee531aca26c921e1f474ab49",
 		"guzzlehttp/guzzle": "3.8.1",
 		"symfony/console": "2.6.11",
 		"webmozart/json": "~1.0"
