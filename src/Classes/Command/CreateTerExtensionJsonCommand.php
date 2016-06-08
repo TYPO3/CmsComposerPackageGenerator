@@ -145,7 +145,12 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
     {
         $autoload = array(
             'classmap' => array(''),
-            'exclude-from-classmap' => array('Tests', 'tests', 'class.ext_update.php'),
+            'exclude-from-classmap' => array(
+                'Migrations',
+                'Tests',
+                'tests',
+                'class.ext_update.php',
+            ),
         );
         if (!empty($version->composerinfo)) {
             $composerInfo = json_decode((string)$version->composerinfo, true);
