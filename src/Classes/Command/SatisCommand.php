@@ -78,6 +78,7 @@ class SatisCommand extends \Symfony\Component\Console\Command\Command
         $satis->setHomepage('https://composer.typo3.org');
         $satis->setRepositories($repositories);
         $satis->requireAll();
+        $satis->useProviders();
 
         if (FALSE === file_put_contents($filePath, (string)$satis)) {
             throw new \RuntimeException(sprintf('File "%s" could not be written, reason unknown', $filePath), 1438442238);
