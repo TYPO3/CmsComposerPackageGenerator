@@ -26,7 +26,7 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
     /**
      * @var string
      */
-    const TER_XML_PATH = 'https://typo3.org/fileadmin/ter/extensions.xml.gz';
+    const TER_XML_PATH = 'https://extensions.typo3.org/fileadmin/ter/extensions.xml.gz';
 
     /**
      * @var string
@@ -173,8 +173,8 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
                 )
             ),
             'dist' => array(
-                'url' => 'https://typo3.org/extensions/repository/download/' . $extension['extensionkey'] . '/' . $version['version'] . '/t3x/',
-                'type' => 't3x',
+                'url' => 'https://extensions.typo3.org/extension/download/' . $extension['extensionkey'] . '/' . $version['version'] . '/zip/',
+                'type' => 'zip',
             ),
             'autoload' => $autoload
         );
