@@ -62,8 +62,8 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
 
       'news' => 'georgringer/news',
       'typo3_console' => 'helhum/typo3-console',
-      'notiz' => 'typo3-ter/notiz',
-      'formz' => 'typo3-ter/formz',
+      'notiz' => 'cuyz/notiz',
+      'formz' => 'romm/formz',
     );
 
     /**
