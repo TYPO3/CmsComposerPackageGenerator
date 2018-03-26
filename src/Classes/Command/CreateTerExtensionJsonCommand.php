@@ -54,6 +54,18 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
     protected $extensionKeys;
 
     /**
+     * Extensions in this array are marked as abandoned when users install them with typo3-ter/ext-key
+     *
+     * @var array
+     */
+    protected static $abandonedExtensionKeys = array(
+
+      'news' => 'georgringer/news',
+      'typo3_console' => 'helhum/typo3-console',
+
+    );
+
+    /**
      * @return void
      */
     protected function configure()
@@ -143,6 +155,7 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
      */
     protected function getPackageArray(\SimpleXMLElement $extension, \SimpleXMLElement $version)
     {
+        $extKey = (string)$extension['extensionkey'];
         $autoload = array(
             'classmap' => array(''),
             'exclude-from-classmap' => array(
@@ -173,11 +186,15 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
                 )
             ),
             'dist' => array(
-                'url' => 'https://extensions.typo3.org/extension/download/' . $extension['extensionkey'] . '/' . $version['version'] . '/zip/',
+                'url' => 'https://extensions.typo3.org/extension/download/' . $extKey . '/' . $version['version'] . '/zip/',
                 'type' => 'zip',
             ),
             'autoload' => $autoload
         );
+
+        if (isset(self::$abandonedExtensionKeys[$extKey])) {
+            $packageArray['abandoned'] = self::$abandonedExtensionKeys[$extKey];
+        }
 
         $packageArray = array_merge(
             $packageArray,
