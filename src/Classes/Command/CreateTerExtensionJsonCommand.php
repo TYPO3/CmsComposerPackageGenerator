@@ -62,6 +62,11 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
 
       'news' => 'georgringer/news',
       'typo3_console' => 'helhum/typo3-console',
+      'sf_event_mgt' => 'derhansen/sf_event_mgt',
+      'sf_yubikey' => 'derhansen/sf_yubikey',
+      'sf_banners' => 'derhansen/sf_banners',
+      'femanager_dmail_subscribe' => 'derhansen/femanager_dmail_subscribe',
+      'tobserver' => 'derhansen/tobserver',
 
     );
 
