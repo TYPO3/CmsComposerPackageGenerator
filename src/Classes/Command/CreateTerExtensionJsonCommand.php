@@ -1,4 +1,6 @@
 <?php
+namespace TYPO3\Composer\Command;
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -11,8 +13,8 @@
  *
  * The TYPO3 project - inspiring people to share!
  */
-namespace TYPO3\Composer\Command;
 
+use GuzzleHttp\Client;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -97,8 +99,17 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
     protected function getExtensions()
     {
         if (!isset($this->extensions)) {
-            exec('wget --no-check-certificate -q -O- ' . escapeshellarg($this::TER_XML_PATH) . ' | gzip -d', $output);
-            $extensionsObject = new \SimpleXMLElement(implode(PHP_EOL, $output));
+            $client = new Client();
+            $response = $client->request(
+                'GET',
+                static::TER_XML_PATH,
+                [
+                    'connect_timeout' => 2,
+                    'allow_redirects' => false,
+                ]
+            );
+            $extensionsXml = gzdecode($response->getBody());
+            $extensionsObject = new \SimpleXMLElement($extensionsXml);
             $this->extensions = $extensionsObject->extension;
             $this->initExtensionKeys($this->extensions);
         }
