@@ -33,6 +33,11 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
     /**
      * @var string
      */
+    const TER_HOME = 'https://extensions.typo3.org/extension/%s/';
+
+    /**
+     * @var string
+     */
     const PACKAGE_NAME_PREFIX = 'typo3-ter/';
 
     /**
@@ -216,6 +221,7 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
             'version' => (string)$version['version'],
             'type' => self::PACKAGE_TYPE,
             'time' => date('Y-m-d H:i:s', (int)$version->lastuploaddate),
+            'homepage' => sprintf(self::TER_HOME, (string)$extension['extensionkey']),
             'authors' => [
                 [
                     'name' => (string)$version->authorname,
