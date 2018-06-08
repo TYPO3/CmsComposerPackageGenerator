@@ -17,6 +17,7 @@ namespace TYPO3\Composer\Command;
 use GuzzleHttp\Client;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Webmozart\Json\JsonDecoder;
 
 /**
  * Class CreateTerExtensionJsonCommand
@@ -29,6 +30,11 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
      * @var string
      */
     const TER_XML_PATH = 'https://extensions.typo3.org/fileadmin/ter/extensions.xml.gz';
+
+    /**
+     * @var string
+     */
+    const COMPOSER_NAMES_URL = 'https://extensions.typo3.org/?eID=ter_fe2:extension&action=findAllWithValidComposerName';
 
     /**
      * @var string
@@ -85,11 +91,41 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->fetchComposerNames();
         $extensions = $this->getExtensions();
         $packages = $this->getPackages($extensions);
 
         foreach ($packages as $type => $content) {
             $this->save($type, array('packages' => $content));
+        }
+    }
+
+    protected function fetchComposerNames()
+    {
+        $client = new Client();
+        $response = $client->request(
+            'GET',
+            static::COMPOSER_NAMES_URL,
+            [
+                'connect_timeout' => 2,
+                'allow_redirects' => false,
+            ]
+        );
+        $responseBody = $response->getBody();
+
+        $jsonDecoder = new JsonDecoder();
+        $jsonDecoder->setObjectDecoding(JsonDecoder::ASSOC_ARRAY);
+
+        $json = $jsonDecoder->decode($responseBody);
+
+        if ($json['meta'] !== null) {
+            throw new \Exception($json['meta']['error']);
+        }
+
+        if (\is_array($json['data'])) {
+            foreach ($json['data'] as $extKey => $settings) {
+                self::$abandonedExtensionKeys[$extKey] = $settings['composer_name'];
+            }
         }
     }
 
