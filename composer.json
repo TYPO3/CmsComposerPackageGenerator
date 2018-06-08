@@ -16,7 +16,7 @@
 	"require": {
 		"php": "^5.5 || ^7.0",
 		"composer/satis": "dev-master#c41456ad18a5b104ee531aca26c921e1f474ab49",
-		"guzzlehttp/guzzle": "3.8.1",
+		"guzzlehttp/guzzle": "^6.3.3",
 		"symfony/console": "2.6.11",
 		"webmozart/json": "~1.0"
 	},
@@ -36,6 +36,9 @@
 	},
 	"bin": ["bin/typo3-cms-package-generator"],
 	"config": {
-		"bin-dir": "bin/"
+		"bin-dir": "bin/",
+		"platform": {
+			"php": "5.6.33"
+		}
 	}
 }
