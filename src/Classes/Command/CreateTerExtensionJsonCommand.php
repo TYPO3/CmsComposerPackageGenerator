@@ -247,7 +247,7 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
             $this->evaluateReviewState($version->reviewstate)
         );
 
-        $dependencies = unserialize((string)$version->dependencies, ['allowed_classes' => false]);
+        $dependencies = unserialize((string)$version->dependencies);
 
         if (!\is_array($dependencies)) {
             // Ignore extensions with invalid dependencies
