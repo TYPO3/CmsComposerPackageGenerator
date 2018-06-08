@@ -146,6 +146,7 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
                 $package = $this->getPackageArray($extension, $version);
 
                 if (!isset($package['require']['typo3/cms-core'])) {
+                    // Ignore extensions with invalid version numbers
                     continue;
                 }
 
@@ -212,9 +213,16 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
             $this->evaluateReviewState($version->reviewstate)
         );
 
+        $dependencies = unserialize((string)$version->dependencies, ['allowed_classes' => false]);
+
+        if (!\is_array($dependencies)) {
+            // Ignore extensions with invalid dependencies
+            return [];
+        }
+
         $packageArray = array_merge(
             $packageArray,
-            $this->getPackageLinks(unserialize((string)$version->dependencies))
+            $this->getPackageLinks($dependencies)
         );
 
         $packageArray['replace'][(string)$extension['extensionkey']] = 'self.version';
