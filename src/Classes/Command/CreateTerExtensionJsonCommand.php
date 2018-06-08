@@ -21,11 +21,9 @@ use Webmozart\Json\JsonDecoder;
 
 /**
  * Class CreateTerExtensionJsonCommand
- * @package TYPO3\Composer\Command
  */
 class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\Command
 {
-
     /**
      * @var string
      */
@@ -66,12 +64,10 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
      *
      * @var array
      */
-    protected static $abandonedExtensionKeys = array(
-
+    protected static $abandonedExtensionKeys = [
       'news' => 'georgringer/news',
       'typo3_console' => 'helhum/typo3-console',
-
-    );
+    ];
 
     /**
      * @return void
@@ -96,7 +92,7 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
         $packages = $this->getPackages($extensions);
 
         foreach ($packages as $type => $content) {
-            $this->save($type, array('packages' => $content));
+            $this->save($type, ['packages' => $content]);
         }
     }
 
@@ -149,6 +145,7 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
             $this->extensions = $extensionsObject->extension;
             $this->initExtensionKeys($this->extensions);
         }
+
         return $this->extensions;
     }
 
@@ -169,7 +166,7 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
      */
     protected function getPackages($extensions)
     {
-        $packages = array();
+        $packages = [];
         $quarter = mktime(0, 0, 0, floor((date('m') - 1) / 3) * 3 + 1, 1, date('Y'));
         foreach ($extensions as $extension) {
             foreach ($extension->version as $version) {
@@ -193,6 +190,7 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
                 }
             }
         }
+
         return $packages;
     }
 
@@ -204,41 +202,41 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
     protected function getPackageArray(\SimpleXMLElement $extension, \SimpleXMLElement $version)
     {
         $extKey = (string)$extension['extensionkey'];
-        $autoload = array(
-            'classmap' => array(''),
-            'exclude-from-classmap' => array(
+        $autoload = [
+            'classmap' => [''],
+            'exclude-from-classmap' => [
                 'Migrations',
                 'Tests',
                 'tests',
                 'class.ext_update.php',
-            ),
-        );
+            ],
+        ];
         if (!empty($version->composerinfo)) {
             $composerInfo = json_decode((string)$version->composerinfo, true);
             if (!empty($composerInfo['autoload'])) {
                 $autoload = $composerInfo['autoload'];
             }
         }
-        $packageArray = array(
+        $packageArray = [
             'name' => $this->getPackageName((string)$extension['extensionkey']),
             'description' => (string)$version->description,
             'version' => (string)$version['version'],
             'type' => self::PACKAGE_TYPE,
             'time' => date('Y-m-d H:i:s', (int)$version->lastuploaddate),
-            'authors' => array(
-                array(
+            'authors' => [
+                [
                     'name' => (string)$version->authorname,
                     'email' => (string)$version->authoremail,
                     'company' => (string)$version->authorcompany,
                     'username' => (string)$version->ownerusername,
-                )
-            ),
-            'dist' => array(
+                ],
+            ],
+            'dist' => [
                 'url' => 'https://extensions.typo3.org/extension/download/' . $extKey . '/' . $version['version'] . '/zip/',
                 'type' => 'zip',
-            ),
-            'autoload' => $autoload
-        );
+            ],
+            'autoload' => $autoload,
+        ];
 
         if (isset(self::$abandonedExtensionKeys[$extKey])) {
             $packageArray['abandoned'] = self::$abandonedExtensionKeys[$extKey];
@@ -276,7 +274,7 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
      */
     protected function getPackageLinks($dependencies)
     {
-        $packageLinks = array();
+        $packageLinks = [];
         foreach ($dependencies as $dependency) {
             $linkType = '';
             switch ($dependency['kind']) {
@@ -324,6 +322,7 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
 
             $packageLinks[$linkType][$this->getPackageName($dependency['extensionKey'])] = $versionConstraint;
         }
+
         return $packageLinks;
     }
 
@@ -345,9 +344,10 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
     {
         $jsonFilePath = self::JSON_FILE_PATH;
         $jsonFilePath = str_replace('{type}', $type, $jsonFilePath);
-        if ($jsonFilePath{0} !== '/') {
+        if ($jsonFilePath[0] !== '/') {
             $jsonFilePath = dirname($_SERVER['PHP_SELF']) . '/' . $jsonFilePath;
         }
+
         return $jsonFilePath;
     }
 
@@ -373,14 +373,14 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
      */
     protected function evaluateReviewState($reviewState)
     {
-        $return = array();
+        $return = [];
 
         if ((int)$reviewState === -1) {
-            $return['extra'] = array(
-                'typo3/ter' => array(
-                    'review-state' => 'insecure'
-                )
-            );
+            $return['extra'] = [
+                'typo3/ter' => [
+                    'review-state' => 'insecure',
+                ],
+            ];
         }
 
         return $return;

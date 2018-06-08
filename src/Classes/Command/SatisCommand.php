@@ -19,7 +19,6 @@ use TYPO3\Composer\Model\SatisJson;
 
 class SatisCommand extends \Symfony\Component\Console\Command\Command
 {
-
     /**
      * @return void
      */
@@ -49,16 +48,16 @@ class SatisCommand extends \Symfony\Component\Console\Command\Command
             throw new \RuntimeException(sprintf('File "%s" is not writable', $filePath), 1438441994);
         }
 
-        $repositories = array(
-              array(
+        $repositories = [
+              [
                   'type' => 'composer',
-                  'url' => 'file://' . $webroot . '/Web/packages-TYPO3Extensions-archive.json'
-              ),
-              array(
+                  'url' => 'file://' . $webroot . '/Web/packages-TYPO3Extensions-archive.json',
+              ],
+              [
                   'type' => 'composer',
-                  'url' => 'file://' . $webroot . '/Web/packages-TYPO3Extensions-quarter.json'
-              )
-          );
+                  'url' => 'file://' . $webroot . '/Web/packages-TYPO3Extensions-quarter.json',
+              ],
+          ];
 
         $satis = new SatisJson('TYPO3 Extension Repository');
         $satis->setHomepage('https://composer.typo3.org');
@@ -66,7 +65,7 @@ class SatisCommand extends \Symfony\Component\Console\Command\Command
         $satis->requireAll();
         $satis->useProviders();
 
-        if (FALSE === file_put_contents($filePath, (string)$satis)) {
+        if (false === file_put_contents($filePath, (string)$satis)) {
             throw new \RuntimeException(sprintf('File "%s" could not be written, reason unknown', $filePath), 1438442238);
         }
         $output->writeln(sprintf('Successfully created "%s"', $filePath));

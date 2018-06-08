@@ -18,7 +18,6 @@ use Webmozart\Json\JsonEncoder;
 
 class SatisJson
 {
-
     /**
      * @var array
      */
@@ -38,15 +37,15 @@ class SatisJson
             throw new \InvalidArgumentException(sprintf('Argument "$name" must be of type "string", "%s" given', gettype($name)));
         }
 
-        $this->data = array(
+        $this->data = [
             'name' => $name,
             'homepage' => null,
-            'repositories' => array(),
-            'require' => array(),
+            'repositories' => [],
+            'require' => [],
             'require-all' => false,
             'require-dependencies' => false,
             'require-dev-dependencies' => false,
-        );
+        ];
         $this->jsonEncoder = new JsonEncoder();
         $this->jsonEncoder->setPrettyPrinting(true);
     }
