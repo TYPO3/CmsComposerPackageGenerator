@@ -1,4 +1,6 @@
 <?php
+namespace TYPO3\Composer\Model;
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -11,14 +13,9 @@
  *
  * The TYPO3 project - inspiring people to share!
  */
-namespace TYPO3\Composer\Model;
 
 use Webmozart\Json\JsonEncoder;
 
-/**
- * Class SatisJson
- * @package TYPO3\Composer\Model
- */
 class SatisJson
 {
 

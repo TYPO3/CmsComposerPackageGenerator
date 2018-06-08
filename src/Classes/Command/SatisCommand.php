@@ -16,8 +16,6 @@ namespace TYPO3\Composer\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\Composer\Model\SatisJson;
-use Guzzle\Http\Client;
-use Webmozart\Json\JsonDecoder;
 
 class SatisCommand extends \Symfony\Component\Console\Command\Command
 {
@@ -70,8 +68,7 @@ class SatisCommand extends \Symfony\Component\Console\Command\Command
 
         if (FALSE === file_put_contents($filePath, (string)$satis)) {
             throw new \RuntimeException(sprintf('File "%s" could not be written, reason unknown', $filePath), 1438442238);
-        } else {
-            $output->writeln(sprintf('Successfully created "%s"', $filePath));
         }
+        $output->writeln(sprintf('Successfully created "%s"', $filePath));
     }
 }
