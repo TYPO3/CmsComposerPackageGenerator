@@ -15,7 +15,7 @@
 	],
 	"require": {
 		"php": "^5.5 || ^7.0",
-		"composer/satis": "dev-master#c41456ad18a5b104ee531aca26c921e1f474ab49",
+		"composer/satis": "^1.0",
 		"guzzlehttp/guzzle": "^6.3.3",
 		"symfony/console": "^2.7"
 	},
