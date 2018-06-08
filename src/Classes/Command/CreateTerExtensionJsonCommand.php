@@ -17,11 +17,7 @@ namespace TYPO3\Composer\Command;
 use GuzzleHttp\Client;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Webmozart\Json\JsonDecoder;
 
-/**
- * Class CreateTerExtensionJsonCommand
- */
 class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\Command
 {
     /**
@@ -109,10 +105,7 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
         );
         $responseBody = $response->getBody();
 
-        $jsonDecoder = new JsonDecoder();
-        $jsonDecoder->setObjectDecoding(JsonDecoder::ASSOC_ARRAY);
-
-        $json = $jsonDecoder->decode($responseBody);
+        $json = \json_decode($responseBody, true);
 
         if ($json['meta'] !== null) {
             throw new \Exception($json['meta']['error']);

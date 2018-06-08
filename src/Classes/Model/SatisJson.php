@@ -14,19 +14,12 @@ namespace TYPO3\Composer\Model;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Webmozart\Json\JsonEncoder;
-
 class SatisJson
 {
     /**
      * @var array
      */
     protected $data;
-
-    /**
-     * @var JsonEncoder
-     */
-    protected $jsonEncoder;
 
     /**
      * @param string $name
@@ -46,8 +39,6 @@ class SatisJson
             'require-dependencies' => false,
             'require-dev-dependencies' => false,
         ];
-        $this->jsonEncoder = new JsonEncoder();
-        $this->jsonEncoder->setPrettyPrinting(true);
     }
 
     /**
@@ -123,6 +114,6 @@ class SatisJson
             unset($this->data['require']);
         }
 
-        return $this->jsonEncoder->encode($this->data);
+        return \json_encode($this->data, JSON_PRETTY_PRINT);
     }
 }
