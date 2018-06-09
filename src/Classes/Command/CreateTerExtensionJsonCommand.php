@@ -237,13 +237,9 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
             'autoload' => $autoload,
         ];
 
-        if (isset(self::$abandonedExtensionKeys[$extKey])) {
-            $packageArray['abandoned'] = self::$abandonedExtensionKeys[$extKey];
-        }
-
         $packageArray = array_merge(
             $packageArray,
-            $this->evaluateReviewState($version->reviewstate)
+            $this->evaluateExtensionState($extKey, (int)$version->reviewstate, (string)$version->ownerusername)
         );
 
         $dependencies = unserialize((string)$version->dependencies);
@@ -370,18 +366,34 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
      * @param int $reviewState
      * @return array
      */
-    protected function evaluateReviewState($reviewState)
+    protected function evaluateExtensionState($extKey, $reviewState, $owner)
     {
-        $return = [];
+        $packageArray = [];
 
-        if ((int)$reviewState === -1) {
-            $return['extra'] = [
+        if ($reviewState === -1) {
+            $packageArray['extra'] = [
                 'typo3/ter' => [
                     'review-state' => 'insecure',
                 ],
             ];
         }
 
-        return $return;
+        if ($reviewState === -2) {
+            $packageArray['extra'] = [
+                'typo3/ter' => [
+                    'review-state' => 'outdated',
+                ],
+            ];
+        }
+
+        if ($owner === 'abandoned_extensions' || $owner === 'abandon') {
+            $packageArray['abandoned'] = true;
+        }
+
+        if (isset(self::$abandonedExtensionKeys[$extKey])) {
+            $packageArray['abandoned'] = self::$abandonedExtensionKeys[$extKey];
+        }
+
+        return $packageArray;
     }
 }
