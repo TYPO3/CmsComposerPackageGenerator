@@ -66,6 +66,7 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
      * @var array
      */
     protected static $abandonedExtensionKeys = [
+      'crawler' => 'aoepeople/crawler',
       'news' => 'georgringer/news',
       'typo3_console' => 'helhum/typo3-console',
     ];
