@@ -62,7 +62,7 @@ class SatisCommand extends \Symfony\Component\Console\Command\Command
               ],
           ];
 
-        $satis = new SatisJson('TYPO3 Extension Repository');
+        $satis = new SatisJson('typo3/cms-composer-repository');
         $satis->setHomepage('https://composer.typo3.org');
         $satis->setRepositories($repositories);
         $satis->requireAll();
