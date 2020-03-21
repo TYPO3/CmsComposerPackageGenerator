@@ -285,7 +285,6 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
                     break;
                 default:
                     continue 2;
-                    break;
             }
 
             if ($dependency['extensionKey'] !== 'php'
