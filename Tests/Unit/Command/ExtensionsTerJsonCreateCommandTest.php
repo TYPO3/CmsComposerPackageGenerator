@@ -22,12 +22,12 @@
 namespace TYPO3\Composer\Tests\Unit\Command;
 
 /**
- * Class CreateTerExtensionJsonCommandTest
+ * Class ExtensionsTerJsonCreateCommandTest
  */
-class CreateTerExtensionJsonCommandTest extends \TYPO3\Composer\Tests\Unit\BaseTestCase
+class ExtensionsTerJsonCreateCommandTest extends \TYPO3\Composer\Tests\Unit\BaseTestCase
 {
     /**
-     * @var \TYPO3\Composer\Command\CreateTerExtensionJsonCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @var \TYPO3\Composer\Command\ExtensionsTerJsonCreateCommand|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $command;
 
@@ -36,10 +36,10 @@ class CreateTerExtensionJsonCommandTest extends \TYPO3\Composer\Tests\Unit\BaseT
      */
     protected $fixture;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->fixture = new \SimpleXMLElement(file_get_contents(__DIR__ . '/../Fixture/extensions.xml'));
-        $this->command = $this->getAccessibleMock('TYPO3\\Composer\\Command\\CreateTerExtensionJsonCommand', ['dummy'], [], '', false);
+        $this->command = $this->getAccessibleMock('TYPO3\\Composer\\Command\\ExtensionsTerJsonCreateCommand', ['dummy'], [], '', false);
     }
 
     public function testFoo()

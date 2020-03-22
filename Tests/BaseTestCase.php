@@ -21,13 +21,15 @@
 
 namespace TYPO3\Composer\Tests\Unit;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * The mother of all test cases.
  *
  * Don't sub class this test case but rather choose a more specialized base test case,
  * such as UnitTestCase or FunctionalTestCase
  */
-abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
+abstract class BaseTestCase extends TestCase
 {
     /**
      * Whether global variables should be backed up

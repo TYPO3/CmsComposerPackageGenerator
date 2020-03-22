@@ -12,11 +12,20 @@
  *
  * The TYPO3 project - inspiring people to share!
  */
-require __DIR__ . '/../' . '/vendor/autoload.php';
+
+$dir = $rootDir = \dirname(__DIR__);
+while (!file_exists($dir . '/vendor/autoload.php')) {
+    if ($dir === \dirname($dir)) {
+        exit(1);
+    }
+    $dir = \dirname($dir);
+}
+
+require $dir . '/vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
 
 $console = new Application();
-$console->add(new \TYPO3\Composer\Command\CreateTerExtensionJsonCommand());
-$console->add(new \TYPO3\Composer\Command\SatisCommand());
+$console->add(new \TYPO3\Composer\Command\ExtensionsTerJsonCreateCommand());
+$console->add(new \TYPO3\Composer\Command\SatisJsonCreateCommand());
 $console->run();
