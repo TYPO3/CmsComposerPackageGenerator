@@ -28,4 +28,5 @@ use Symfony\Component\Console\Application;
 $console = new Application();
 $console->add(new \TYPO3\Composer\Command\ExtensionsTerJsonCreateCommand());
 $console->add(new \TYPO3\Composer\Command\SatisJsonCreateCommand());
+$console->add(new \TYPO3\Composer\Command\SatisBuildCommand());
 $console->run();
