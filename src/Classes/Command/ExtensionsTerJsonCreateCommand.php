@@ -193,7 +193,10 @@ class ExtensionsTerJsonCreateCommand extends \Symfony\Component\Console\Command\
     protected function getPackages($extensions)
     {
         $packages = [];
-        $quarter = mktime(0, 0, 0, floor((date('m') - 1) / 3) * 3 + 1, 1, date('Y'));
+        //$quarter = mktime(0, 0, 0, floor((date('m') - 1) / 3) * 3 + 1, 1, date('Y'));
+        $dateTimeToday = new \DateTimeImmutable();
+        $new = $dateTimeToday->modify('yesterday')->getTimestamp();
+
         foreach ($extensions as $extension) {
             foreach ($extension->version as $version) {
                 if (!preg_match('/^[\d]+\.[\d]+\.[\d]+$/', $version['version'])) {
@@ -209,8 +212,10 @@ class ExtensionsTerJsonCreateCommand extends \Symfony\Component\Console\Command\
                     continue;
                 }
 
-                if ($quarter < (int)$version->lastuploaddate) {
-                    $packages['quarter'][$package['name']][$package['version']] = $package;
+                //if ($quarter < (int)$version->lastuploaddate) {
+                if ($new < (int)$version->lastuploaddate) {
+                    //$packages['quarter'][$package['name']][$package['version']] = $package;
+                    $packages['new'][$package['name']][$package['version']] = $package;
                 } else {
                     $packages['archive'][$package['name']][$package['version']] = $package;
                 }
