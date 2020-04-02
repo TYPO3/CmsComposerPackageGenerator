@@ -46,6 +46,8 @@ class SatisBuildCommand extends \Symfony\Component\Console\Command\Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $timeStart = microtime(true);
+
         $repositoryDir = $input->getArgument('repository-dir');
         $configFile = $input->getArgument('file');
         $outputDir = $input->getArgument('output-dir');
@@ -60,6 +62,7 @@ class SatisBuildCommand extends \Symfony\Component\Console\Command\Command
         ];
 
         $commandInput = new ArrayInput($arguments);
+        $output->writeln(sprintf('Running "%s"...', $arguments['command']));
         $returnCode = $command->run($commandInput, $output);
 
         // Run satis:json:create
@@ -73,12 +76,14 @@ class SatisBuildCommand extends \Symfony\Component\Console\Command\Command
             ];
 
             $commandInput = new ArrayInput($arguments);
+            $output->writeln(sprintf('Running "%s"...', $arguments['command']));
             $returnCode = $command->run($commandInput, $output);
         }
 
         // Run satis build
         if ($returnCode === 0) {
             $application = new \Composer\Satis\Console\Application();
+            $application->setAutoExit(false);
 
             //php -d memory_limit=-1 $BIN_DIR/satis build ./satis.json $WEB_DIR --skip-errors
             $arguments = [
@@ -95,8 +100,21 @@ class SatisBuildCommand extends \Symfony\Component\Console\Command\Command
             }
 
             $commandInput = new ArrayInput($arguments);
+            $output->writeln(sprintf('Running "%s" (%s)...', $arguments['command'], $buildAll ? 'full' : 'new'));
             $returnCode = $application->run($commandInput, $output);
         }
+
+        // Rename Satis index
+        if ($returnCode === 0) {
+            $output->writeln('Renaming Satis index...');
+            rename(realpath($outputDir) . '/index.html', realpath($outputDir) . '/satis.html');
+        }
+
+        // Output processing duration
+        $timeEnd = microtime(true);
+        $time = $timeEnd - $timeStart;
+
+        $output->writeln(sprintf('Finished in %f seconds', $time));
 
         return $returnCode;
     }
