@@ -249,12 +249,12 @@ class ExtensionsTerJsonCreateCommand extends \Symfony\Component\Console\Command\
             }
         }
         $packageArray = [
-            'name' => $this->getPackageName((string)$extension['extensionkey']),
+            'name' => $this->getPackageName($extKey),
             'description' => (string)$version->description,
             'version' => (string)$version['version'],
             'type' => self::PACKAGE_TYPE,
             'time' => date('Y-m-d H:i:s', (int)$version->lastuploaddate),
-            'homepage' => sprintf(self::TER_HOME, (string)$extension['extensionkey']),
+            'homepage' => sprintf(self::TER_HOME, $extKey),
             'authors' => [
                 [
                     'name' => (string)$version->authorname,
@@ -268,6 +268,11 @@ class ExtensionsTerJsonCreateCommand extends \Symfony\Component\Console\Command\
                 'type' => 'zip',
             ],
             'autoload' => $autoload,
+            'extra' => [
+                'typo3/cms' => [
+                    'extension-key' => $extKey,
+                ],
+            ],
         ];
 
         $packageArray = array_merge(
@@ -287,8 +292,7 @@ class ExtensionsTerJsonCreateCommand extends \Symfony\Component\Console\Command\
             $this->getPackageLinks($dependencies)
         );
 
-        $packageArray['replace'][(string)$extension['extensionkey']] = 'self.version';
-        $alternativeName = self::PACKAGE_NAME_PREFIX . (string)$extension['extensionkey'];
+        $alternativeName = self::PACKAGE_NAME_PREFIX . $extKey;
         if ($alternativeName !== $packageArray['name']) {
             $packageArray['replace'][$alternativeName] = 'self.version';
         }
