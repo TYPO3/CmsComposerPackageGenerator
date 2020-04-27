@@ -430,6 +430,9 @@ class ExtensionsTerJsonCreateCommand extends \Symfony\Component\Console\Command\
 
         if (isset(self::$abandonedExtensionKeys[$extKey])) {
             $packageArray['abandoned'] = self::$abandonedExtensionKeys[$extKey];
+        } else {
+            // Abandon all extensions because this repository is deprecated at all
+            $packageArray['abandoned'] = true;
         }
 
         return $packageArray;
