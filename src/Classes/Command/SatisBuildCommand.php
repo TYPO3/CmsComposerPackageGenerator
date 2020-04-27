@@ -85,7 +85,6 @@ class SatisBuildCommand extends \Symfony\Component\Console\Command\Command
             $application = new \Composer\Satis\Console\Application();
             $application->setAutoExit(false);
 
-            //php -d memory_limit=-1 $BIN_DIR/satis build ./satis.json $WEB_DIR --skip-errors
             $arguments = [
                 'command'           => 'build',
                 'file'              => $configFile,

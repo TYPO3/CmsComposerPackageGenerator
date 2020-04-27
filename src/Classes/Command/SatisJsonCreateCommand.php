@@ -42,10 +42,6 @@ class SatisJsonCreateCommand extends \Symfony\Component\Console\Command\Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /*
-        $webroot = realpath(__DIR__ . '/../../../');
-        $configFile = $webroot . '/satis.json';
-        */
         $configFile = $input->getArgument('file');
         $repositoryDir = realpath($input->getArgument('repository-dir'));
 
@@ -62,12 +58,6 @@ class SatisJsonCreateCommand extends \Symfony\Component\Console\Command\Command
                 'type' => 'composer',
                 'url' => 'file://' . $repositoryDir . '/packages-TYPO3Extensions-archive.json',
             ],
-            /*
-            [
-                'type' => 'composer',
-                'url' => 'file://' . $repositoryDir . '/packages-TYPO3Extensions-quarter.json',
-            ],
-            */
             [
                 'type' => 'composer',
                 'url' => 'file://' . $repositoryDir . '/packages-TYPO3Extensions-new.json',

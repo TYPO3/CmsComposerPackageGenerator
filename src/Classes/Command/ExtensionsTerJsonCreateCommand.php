@@ -379,12 +379,6 @@ class ExtensionsTerJsonCreateCommand extends \Symfony\Component\Console\Command\
         $jsonFilePath = $this->outputDir . '/' . self::JSON_FILE;
         $jsonFilePath = str_replace('{type}', $type, $jsonFilePath);
 
-        /*
-        if ($jsonFilePath[0] !== '/') {
-            $jsonFilePath = dirname($_SERVER['PHP_SELF']) . '/' . $jsonFilePath;
-        }
-        */
-
         return $jsonFilePath;
     }
 
