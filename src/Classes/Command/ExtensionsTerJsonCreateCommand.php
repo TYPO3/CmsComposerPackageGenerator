@@ -59,6 +59,11 @@ class ExtensionsTerJsonCreateCommand extends \Symfony\Component\Console\Command\
     const JSON_FILE = 'packages-TYPO3Extensions-{type}.json';
 
     /**
+     * @var string
+     */
+    private const ALIASES_FILE = 'aliases.json';
+
+    /**
      * @var array
      */
     protected $extensions;
@@ -76,7 +81,7 @@ class ExtensionsTerJsonCreateCommand extends \Symfony\Component\Console\Command\
      * prefered over the package created here.
      *
      * Do not create pull requests for this list, simply provide a
-     * composer.json for your extension.
+     * composer.json and register the composer name at TER for your extension.
      *
      * @var array
      */
@@ -86,6 +91,66 @@ class ExtensionsTerJsonCreateCommand extends \Symfony\Component\Console\Command\
     ];
 
     /**
+     * Core extensions
+     *
+     * @var array
+     */
+    protected static $coreExtensions = [
+        'about' => 'typo3/cms-about',
+        'adminpanel' => 'typo3/cms-adminpanel',
+        'backend' => 'typo3/cms-backend',
+        'belog' => 'typo3/cms-belog',
+        'beuser' => 'typo3/cms-beuser',
+        'context_help' => 'typo3/cms-context-help',
+        'core' => 'typo3/cms-core',
+        'cshmanual' => 'typo3/cms-cshmanual',
+        'css_styled_content' => 'typo3/cms-css-styled-content',
+        'documentation' => 'typo3/cms-documentation',
+        'dashboard' => 'typo3/cms-dashboard',
+        'extbase' => 'typo3/cms-extbase',
+        'extensionmanager' => 'typo3/cms-extensionmanager',
+        'feedit' => 'typo3/cms-feedit',
+        'felogin' => 'typo3/cms-felogin',
+        'filelist' => 'typo3/cms-filelist',
+        'filemetadata' => 'typo3/cms-filemetadata',
+        'fluid' => 'typo3/cms-fluid',
+        'fluid_styled_content' => 'typo3/cms-fluid-styled-content',
+        'form' => 'typo3/cms-form',
+        'frontend' => 'typo3/cms-frontend',
+        'func' => 'typo3/cms-func',
+        'impexp' => 'typo3/cms-impexp',
+        'indexed_search' => 'typo3/cms-indexed-search',
+        'info' => 'typo3/cms-info',
+        'info_pagetsconfig' => 'typo3/cms-info-pagetsconfig',
+        'install' => 'typo3/cms-install',
+        'lang' => 'typo3/cms-lang',
+        'linkvalidator' => 'typo3/cms-linkvalidator',
+        'lowlevel' => 'typo3/cms-lowlevel',
+        'opendocs' => 'typo3/cms-opendocs',
+        'recordlist' => 'typo3/cms-recordlist',
+        'recycler' => 'typo3/cms-recycler',
+        'redirects' => 'typo3/cms-redirects',
+        'reports' => 'typo3/cms-reports',
+        'rsaauth' => 'typo3/cms-rsaauth',
+        'rte_ckeditor' => 'typo3/cms-rte-ckeditor',
+        'saltedpasswords' => 'typo3/cms-saltedpasswords',
+        'scheduler' => 'typo3/cms-scheduler',
+        'seo' => 'typo3/cms-seo',
+        'setup' => 'typo3/cms-setup',
+        'sv' => 'typo3/cms-sv',
+        'sys_action' => 'typo3/cms-sys-action',
+        'sys_note' => 'typo3/cms-sys-note',
+        't3editor' => 'typo3/cms-t3editor',
+        'taskcenter' => 'typo3/cms-taskcenter',
+        'tstemplate' => 'typo3/cms-tstemplate',
+        'version' => 'typo3/cms-version',
+        'viewpage' => 'typo3/cms-viewpage',
+        'wizard_crpages' => 'typo3/cms-wizard-crpages',
+        'wizard_sortpages' => 'typo3/cms-wizard-sortpages',
+        'workspaces' => 'typo3/cms-workspaces',
+      ];
+
+      /**
      * Location where to output built files.
      *
      * @var string
@@ -116,6 +181,7 @@ class ExtensionsTerJsonCreateCommand extends \Symfony\Component\Console\Command\
         $this->outputDir = realpath($input->getArgument('output-dir'));
 
         $this->fetchComposerNames();
+        $this->saveAliases();
         $extensions = $this->getExtensions();
         $packages = $this->getPackages($extensions);
 
@@ -124,6 +190,15 @@ class ExtensionsTerJsonCreateCommand extends \Symfony\Component\Console\Command\
         }
 
         return 0;
+    }
+
+    protected function registerComposerAlias(array $extensionKeys, string $composerName)
+    {
+        foreach ($extensionKeys as $extKey) {
+            if (!isset(self::$abandonedExtensionKeys[$extKey])) {
+                self::$abandonedExtensionKeys[$extKey] = $composerName;
+            }
+        }
     }
 
     protected function fetchComposerNames()
@@ -146,10 +221,32 @@ class ExtensionsTerJsonCreateCommand extends \Symfony\Component\Console\Command\
         }
 
         if (\is_array($json['data'])) {
+            // Assign core extensions
+            foreach (self::$coreExtensions as $extKey => $composerName) {
+                $json['data'][$extKey]['composer_name'] = $composerName;
+            }
+
             foreach ($json['data'] as $extKey => $settings) {
                 self::$abandonedExtensionKeys[$extKey] = $settings['composer_name'];
+
+                if (strpos($extKey, '_') !== false) {
+                    $this->registerComposerAlias([
+                        \str_replace('_', '-', $extKey),
+                        \str_replace('_', '', $extKey),
+                    ], $settings['composer_name']);
+                }
             }
+
+            ksort(self::$abandonedExtensionKeys, SORT_STRING);
         }
+    }
+
+    protected function saveAliases()
+    {
+        $fileName = $this->outputDir . '/' . self::ALIASES_FILE;
+        file_put_contents($fileName, json_encode(self::$abandonedExtensionKeys));
+
+        return $fileName;
     }
 
     /**

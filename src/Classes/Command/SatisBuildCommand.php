@@ -65,6 +65,12 @@ class SatisBuildCommand extends \Symfony\Component\Console\Command\Command
         $output->writeln(sprintf('Running "%s"...', $arguments['command']));
         $returnCode = $command->run($commandInput, $output);
 
+        // Copy Aliases
+        if ($returnCode === 0) {
+            $output->writeln('Copy aliases.json...');
+            copy(realpath($repositoryDir) . '/aliases.json', realpath($outputDir) . '/aliases.json');
+        }
+
         // Run satis:json:create
         if ($returnCode === 0) {
             $command = $this->getApplication()->find('satis:json:create');
