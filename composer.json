@@ -1,43 +1,70 @@
 {
-	"name": "typo3/CmsComposerPackageGenerator",
-	"description": "Script for generating TYPO3 CMS packages",
-	"keywords": ["composer", "typo3"],
-	"homepage": "http://composer.typo3.org",
-	"authors": [
-		{
-			"name": "Lars Peipmann",
-			"email": "lars@peipmann.de"
-		},
-		{
-			"name": "Fabien Udriot",
-			"email": "fabien.udriot@typo3.org"
-		}
-	],
-	"require": {
-		"php": "^5.5 || ^7.0",
-		"composer/satis": "^1.0",
-		"guzzlehttp/guzzle": "^6.3.3",
-		"symfony/console": "^2.7"
-	},
-	"require-dev": {
-		"phpunit/phpunit": "~4.5",
-		"symfony/var-dumper": "2.6.11"
-	},
-	"autoload": {
-		"psr-4": {
-			"TYPO3\\Composer\\": "src/Classes/"
-		}
-	},
-	"autoload-dev": {
-		"classmap": [
-			"Tests/"
-		]
-	},
-	"bin": ["bin/typo3-cms-package-generator"],
-	"config": {
-		"bin-dir": "bin/",
-		"platform": {
-			"php": "5.6.33"
-		}
-	}
+    "name": "typo3/cms-composer-package-generator",
+    "description": "Script for generating TYPO3 CMS packages",
+    "keywords": ["composer", "typo3"],
+    "homepage": "http://composer.typo3.org",
+    "authors": [
+        {
+            "name": "Lars Peipmann",
+            "email": "lars@peipmann.de"
+        },
+        {
+            "name": "Fabien Udriot",
+            "email": "fabien.udriot@typo3.org"
+        }
+    ],
+    "require": {
+        "php": "^5.5 || ^7.0",
+        "ext-json": "*",
+        "ext-SimpleXML": "*",
+        "ext-zlib": "*",
+        "composer/satis": "dev-master",
+        "guzzlehttp/guzzle": "^6.5",
+        "symfony/console": "*"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "overtrue/phplint": "^1.2",
+        "symfony/debug-pack": "*",
+        "symfony/maker-bundle": "*",
+        "symfony/test-pack": "*",
+        "symfony/var-dumper": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "TYPO3\\Composer\\": "src/Classes/"
+        }
+    },
+    "autoload-dev": {
+        "classmap": [
+            "Tests/"
+        ]
+    },
+    "bin": ["bin/typo3-cms-package-generator"],
+    "config": {
+        "bin-dir": "bin",
+        "platform": {
+            "php": "7.4.3"
+        }
+    },
+    "scripts": {
+        "test:php:cgl": [
+            "php-cs-fixer --diff -v fix --format=junit > php-cs-fixer.xml"
+        ],
+        "test:php:lint": [
+            "phplint"
+        ],
+        "test:php:unit": [
+            "phpunit -c ./Build/UnitTests.xml --log-junit phpunit-unit.xml --testsuite \"Unit Test Suite\"",
+            "phpunit -c phpunit.xml.dist --log-junit phpunit-unit2.xml --testsuite \"Unit Test Suite\""
+        ],
+        "test:php:functional": [
+            "phpunit -c phpunit.xml.dist --log-junit phpunit-functional.xml --testsuite \"Functional Test Suite\""
+        ],
+        "test": [
+            "@test:php:cgl",
+            "@test:php:lint",
+            "@test:php:unit"
+        ]
+    }
 }
