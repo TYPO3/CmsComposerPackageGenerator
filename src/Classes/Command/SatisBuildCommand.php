@@ -1,30 +1,34 @@
 <?php
+
 /*
- * This file is part of the TYPO3 CMS project.
+ * This file is part of the package typo3/cms-composer-package-generator.
  *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
+ * LICENSE file that was distributed with this source code.
  *
  * The TYPO3 project - inspiring people to share!
  */
+
 namespace TYPO3\Composer\Command;
 
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use TYPO3\Composer\Model\SatisJson;
 
 class SatisBuildCommand extends \Symfony\Component\Console\Command\Command
 {
-    /**
-     * @return void
-     */
     protected function configure()
     {
         $this
@@ -51,14 +55,14 @@ class SatisBuildCommand extends \Symfony\Component\Console\Command\Command
         $repositoryDir = $input->getArgument('repository-dir');
         $configFile = $input->getArgument('file');
         $outputDir = $input->getArgument('output-dir');
-        $buildAll = (bool) $input->getOption('all');
+        $buildAll = (bool)$input->getOption('all');
 
         // Run extensions:ter:json:create
         $command = $this->getApplication()->find('extensions:ter:json:create');
 
         $arguments = [
             'command' => 'extensions:ter:json:create',
-            'output-dir'    => $repositoryDir,
+            'output-dir' => $repositoryDir,
         ];
 
         $commandInput = new ArrayInput($arguments);
@@ -77,8 +81,8 @@ class SatisBuildCommand extends \Symfony\Component\Console\Command\Command
 
             $arguments = [
                 'command' => 'satis:json:create',
-                'file'    => $configFile,
-                'repository-dir'  => $repositoryDir,
+                'file' => $configFile,
+                'repository-dir' => $repositoryDir,
             ];
 
             $commandInput = new ArrayInput($arguments);
@@ -92,15 +96,15 @@ class SatisBuildCommand extends \Symfony\Component\Console\Command\Command
             $application->setAutoExit(false);
 
             $arguments = [
-                'command'           => 'build',
-                'file'              => $configFile,
-                'output-dir'        => $outputDir,
-                '--skip-errors'     => true,
+                'command' => 'build',
+                'file' => $configFile,
+                'output-dir' => $outputDir,
+                '--skip-errors' => true,
             ];
 
             if (!$buildAll) {
                 $arguments += [
-                    '--repository-url'  => 'file://' . realpath($repositoryDir) . '/packages-TYPO3Extensions-new.json',
+                    '--repository-url' => 'file://' . realpath($repositoryDir) . '/packages-TYPO3Extensions-new.json',
                 ];
             }
 

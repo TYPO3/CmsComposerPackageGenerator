@@ -157,9 +157,6 @@ class ExtensionsTerJsonCreateCommand extends \Symfony\Component\Console\Command\
      */
     protected $outputDir;
 
-    /**
-     * @return void
-     */
     protected function configure()
     {
         $this
