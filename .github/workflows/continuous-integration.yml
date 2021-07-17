@@ -65,7 +65,7 @@ jobs:
 
       - name: Unit Tests
         if: always()
-        run: bin/phpunit --colors Tests/Unit
+        run: bin/phpunit --colors --log-junit var/log/phpunit-unit.xml Tests/Unit
 
       - name: Archive Logs
         uses: actions/upload-artifact@v1
