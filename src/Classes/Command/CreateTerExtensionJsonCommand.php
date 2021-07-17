@@ -283,7 +283,7 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
                     $linkType = 'suggest';
                     break;
                 default:
-                    continue;
+                    continue 2;
                     break;
             }
 
