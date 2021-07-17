@@ -1,5 +1,6 @@
 {
-	"name": "typo3/CmsComposerPackageGenerator",
+	"name": "typo3/cms-composer-package-generator",
+	"license": "GPL-2.0-or-later",
 	"description": "Script for generating TYPO3 CMS packages",
 	"keywords": ["composer", "typo3"],
 	"homepage": "http://composer.typo3.org",
