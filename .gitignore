@@ -2,6 +2,7 @@
 .idea
 
 /bin/*
+!/bin/typo3-cms-package-generator
 /var
 /vendor
 /Web/packages*
