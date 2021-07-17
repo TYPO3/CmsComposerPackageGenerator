@@ -26,7 +26,7 @@
 		"ext-json": "*",
 		"ext-simplexml": "*",
 		"ext-zlib": "*",
-		"composer/satis": "^1.0",
+		"composer/satis": "^2.0@dev",
 		"guzzlehttp/guzzle": "^6.3.3",
 		"symfony/console": "^3.4.47 || ^4.4 || ^5.3"
 	},
@@ -35,6 +35,8 @@
 		"ergebnis/composer-normalize": "^2.15",
 		"symfony/var-dumper": "^3.2.4 || ^4.4 || ^5.3"
 	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
 	"config": {
 		"bin-dir": "bin/",
 		"platform": {
