@@ -150,7 +150,7 @@ class ExtensionsTerJsonCreateCommand extends \Symfony\Component\Console\Command\
         'workspaces' => 'typo3/cms-workspaces',
       ];
 
-      /**
+    /**
      * Location where to output built files.
      *
      * @var string

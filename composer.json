@@ -35,8 +35,6 @@
 		"ergebnis/composer-normalize": "^2.15",
 		"symfony/var-dumper": "^3.2.4 || ^4.4 || ^5.3"
 	},
-	"minimum-stability": "dev",
-	"prefer-stable": true,
 	"config": {
 		"bin-dir": "bin/",
 		"platform": {
@@ -59,6 +57,8 @@
 			"Tests/"
 		]
 	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
 	"bin": [
 		"bin/typo3-cms-package-generator"
 	],
