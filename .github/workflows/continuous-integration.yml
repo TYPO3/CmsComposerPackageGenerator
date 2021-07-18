@@ -50,7 +50,7 @@ jobs:
             ${{ matrix.php-version }}-composer-
 
       - name: Install dependencies
-        run: composer install --no-progress --prefer-dist
+        run: composer install --no-progress --prefer-dist --ignore-platform-req=php
 
       - name: Validate composer.json
         run: composer ci:composer:validate
