@@ -2,8 +2,10 @@
 .idea
 
 /.php_cs.cache
-/vendor
 /bin/*
+/var
+/vendor
 /Web/packages*
 /Web/include/
+/*.cache
 /satis.json
