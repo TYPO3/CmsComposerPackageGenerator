@@ -15,7 +15,7 @@
 		}
 	],
 	"require": {
-		"php": "^5.5 || ^7.0",
+		"php": "^7.0",
 		"composer/satis": "^1.0",
 		"guzzlehttp/guzzle": "^6.3.3",
 		"symfony/console": "^2.7"
@@ -38,7 +38,7 @@
 	"config": {
 		"bin-dir": "bin/",
 		"platform": {
-			"php": "5.6.33"
+			"php": "7.4.16"
 		}
 	}
 }
