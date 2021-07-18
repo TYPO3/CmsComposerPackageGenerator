@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Composer\Model;
 
 /*
@@ -69,33 +70,21 @@ class SatisJson
         $this->data['repositories'][] = $repository;
     }
 
-    /**
-     * @return void
-     */
     public function requireAll()
     {
         $this->data['require-all'] = true;
     }
 
-    /**
-     * @return void
-     */
     public function requireDependencies()
     {
         $this->data['require-dependencies'] = true;
     }
 
-    /**
-     * @return void
-     */
     public function requireDevDependencies()
     {
         $this->data['require-dev-dependencies'] = true;
     }
 
-    /**
-     * @return void
-     */
     public function useProviders()
     {
         $this->data['providers'] = true;

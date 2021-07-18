@@ -13,8 +13,6 @@ jobs:
       fail-fast: false
       matrix:
         php-version:
-          - '7.0'
-          - '7.1'
           - '7.2'
           - '7.3'
           - '7.4'
@@ -33,7 +31,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           coverage: "none"
-          extensions: ""
+          extensions: "json, simplexml, zlib"
           ini-values: "memory_limit=-1, error_reporting=E_ALL, display_errors=On"
           php-version: "${{ matrix.php-version }}"
           tools: composer:1
@@ -51,19 +49,32 @@ jobs:
           restore-keys: |
             ${{ matrix.php-version }}-composer-
 
-      - name: Install dependencies
-        run: composer install --no-progress --prefer-dist
-
       - name: Validate composer.json
-        run: composer validate
+        run: composer ci:composer:validate
+
+      - name: Install dependencies
+        run: |
+          composer config platform --unset
+          composer update --lock
+          composer install --no-progress --prefer-dist
+
+      - name: Normalize composer.json
+        run: composer ci:composer:normalize
+
+      - name: Check Composer dependencies
+        run: composer ci:composer:require-checker
 
       - name: Lint PHP files
         if: always()
-        run: find . -name \*.php ! -path "./vendor/*" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
+        run: composer ci:php:lint
+
+      - name: Check code styling
+        if: always()
+        run: composer ci:php:cs
 
       - name: Unit Tests
         if: always()
-        run: bin/phpunit --colors --log-junit var/log/phpunit-unit.xml Tests/Unit
+        run: composer ci:php:unit
 
       - name: Archive Logs
         uses: actions/upload-artifact@v1

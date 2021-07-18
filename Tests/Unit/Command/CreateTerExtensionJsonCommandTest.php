@@ -38,8 +38,8 @@ class CreateTerExtensionJsonCommandTest extends \TYPO3\Composer\Tests\Unit\BaseT
     {
         $packages = $this->command->_call('getPackages', $this->fixture);
 
-        $this->assertTrue(isset($packages['archive']['typo3-ter/gridelements']['3.0.0']['require']));
-        $this->assertFalse(isset($packages['archive']['typo3-ter/gridelements']['3.0.0']['require']['typo3-ter/version']));
+        self::assertTrue(isset($packages['archive']['typo3-ter/gridelements']['3.0.0']['require']));
+        self::assertFalse(isset($packages['archive']['typo3-ter/gridelements']['3.0.0']['require']['typo3-ter/version']));
     }
 
     /**
@@ -49,9 +49,9 @@ class CreateTerExtensionJsonCommandTest extends \TYPO3\Composer\Tests\Unit\BaseT
     {
         $packages = $this->command->_call('getPackages', $this->fixture);
 
-        $this->assertTrue(isset($packages['archive']['typo3-ter/gridelements']['2.0.0']['extra']['typo3/ter']['review-state']));
-        $this->assertSame('insecure', $packages['archive']['typo3-ter/gridelements']['2.0.0']['extra']['typo3/ter']['review-state']);
+        self::assertTrue(isset($packages['archive']['typo3-ter/gridelements']['2.0.0']['extra']['typo3/ter']['review-state']));
+        self::assertSame('insecure', $packages['archive']['typo3-ter/gridelements']['2.0.0']['extra']['typo3/ter']['review-state']);
 
-        $this->assertFalse(isset($packages['archive']['typo3-ter/gridelements']['2.0.0']['extra']['typo3/ter']['extra']['review-state']));
+        self::assertFalse(isset($packages['archive']['typo3-ter/gridelements']['2.0.0']['extra']['typo3/ter']['extra']['review-state']));
     }
 }

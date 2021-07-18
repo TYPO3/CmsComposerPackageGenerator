@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Composer\Command;
 
 /*
@@ -70,9 +71,6 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
       'typo3_console' => 'helhum/typo3-console',
     ];
 
-    /**
-     * @return void
-     */
     protected function configure()
     {
         $this
@@ -83,8 +81,6 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     *
-     * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -149,7 +145,6 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
 
     /**
      * @param \SimpleXMLElement[] $extensions
-     * @return void
      */
     protected function initExtensionKeys($extensions)
     {
@@ -299,9 +294,9 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
             $maxVersion = (isset($requiredVersion[1]) ? trim($requiredVersion[1]) : '');
 
             if ((
-                    (empty($minVersion) || $minVersion === '0.0.0' || $minVersion === '*')
+                (empty($minVersion) || $minVersion === '0.0.0' || $minVersion === '*')
                     && (empty($maxVersion) || $maxVersion === '0.0.0' || $maxVersion === '*')
-                )
+            )
                 || !preg_match('/^([\d]+\.[\d]+\.[\d]+)*(\-)*([\d]+\.[\d]+\.[\d]+)*$/', $dependency['versionRange'])
             ) {
                 $versionConstraint = '*';
@@ -324,7 +319,6 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
     /**
      * @param string $type
      * @param array $content
-     * @return void
      */
     protected function save($type, array $content)
     {
@@ -364,6 +358,8 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
 
     /**
      * @param int $reviewState
+     * @param mixed $extKey
+     * @param mixed $owner
      * @return array
      */
     protected function evaluateExtensionState($extKey, $reviewState, $owner)
