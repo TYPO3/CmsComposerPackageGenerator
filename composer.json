@@ -18,7 +18,7 @@
 		},
 		{
 			"name": "Simon Gilli",
-			"email": "typo3@gilbertsoft.org"
+			"email": "simon.gilli@typo3.org"
 		}
 	],
 	"require": {
@@ -26,7 +26,7 @@
 		"ext-json": "*",
 		"ext-simplexml": "*",
 		"ext-zlib": "*",
-		"composer/satis": "^2.0@dev",
+		"composer/satis": "^2.0@dev || ^3.0@dev",
 		"guzzlehttp/guzzle": "^6.3.3",
 		"symfony/console": "^3.4.47 || ^4.4 || ^5.3"
 	},
