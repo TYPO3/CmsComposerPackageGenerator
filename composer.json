@@ -18,15 +18,15 @@
 		},
 		{
 			"name": "Simon Gilli",
-			"email": "typo3@gilbertsoft.org"
+			"email": "simon.gilli@typo3.org"
 		}
 	],
 	"require": {
-		"php": "^7.3 || ^8.0",
+		"php": "^7.4 || ^8.0",
 		"ext-json": "*",
 		"ext-simplexml": "*",
 		"ext-zlib": "*",
-		"composer/satis": "^1.0",
+		"composer/satis": "^2.0@dev || ^3.0@dev",
 		"guzzlehttp/guzzle": "^6.3.3",
 		"symfony/console": "^3.4.47 || ^4.4 || ^5.3"
 	},
@@ -57,6 +57,8 @@
 			"Tests/"
 		]
 	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
 	"bin": [
 		"bin/typo3-cms-package-generator"
 	],

@@ -22,10 +22,11 @@
 namespace TYPO3\Composer\Command;
 
 use GuzzleHttp\Client;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\Command
+class ExtensionsTerJsonCreateCommand extends \Symfony\Component\Console\Command\Command
 {
     /**
      * @var string
@@ -55,7 +56,12 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
     /**
      * @var string
      */
-    const JSON_FILE_PATH = '../Web/packages-TYPO3Extensions-{type}.json';
+    const JSON_FILE = 'packages-TYPO3Extensions-{type}.json';
+
+    /**
+     * @var string
+     */
+    private const ALIASES_FILE = 'aliases.json';
 
     /**
      * @var array
@@ -68,7 +74,14 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
     protected $extensionKeys;
 
     /**
-     * Extensions in this array are marked as abandoned when users install them with typo3-ter/ext-key
+     * Extensions in this array are marked as abandoned when users install
+     * them with typo3-ter/ext-key. This array is autocreated with the
+     * information fetched from TER. Extensions providing a composer.json
+     * will be listed here and as result the author's version will be
+     * prefered over the package created here.
+     *
+     * Do not create pull requests for this list, simply provide a
+     * composer.json and register the composer name at TER for your extension.
      *
      * @var array
      */
@@ -77,25 +90,111 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
       'typo3_console' => 'helhum/typo3-console',
     ];
 
+    /**
+     * Core extensions
+     *
+     * @var array
+     */
+    protected static $coreExtensions = [
+        'about' => 'typo3/cms-about',
+        'adminpanel' => 'typo3/cms-adminpanel',
+        'backend' => 'typo3/cms-backend',
+        'belog' => 'typo3/cms-belog',
+        'beuser' => 'typo3/cms-beuser',
+        'context_help' => 'typo3/cms-context-help',
+        'core' => 'typo3/cms-core',
+        'cshmanual' => 'typo3/cms-cshmanual',
+        'css_styled_content' => 'typo3/cms-css-styled-content',
+        'documentation' => 'typo3/cms-documentation',
+        'dashboard' => 'typo3/cms-dashboard',
+        'extbase' => 'typo3/cms-extbase',
+        'extensionmanager' => 'typo3/cms-extensionmanager',
+        'feedit' => 'typo3/cms-feedit',
+        'felogin' => 'typo3/cms-felogin',
+        'filelist' => 'typo3/cms-filelist',
+        'filemetadata' => 'typo3/cms-filemetadata',
+        'fluid' => 'typo3/cms-fluid',
+        'fluid_styled_content' => 'typo3/cms-fluid-styled-content',
+        'form' => 'typo3/cms-form',
+        'frontend' => 'typo3/cms-frontend',
+        'func' => 'typo3/cms-func',
+        'impexp' => 'typo3/cms-impexp',
+        'indexed_search' => 'typo3/cms-indexed-search',
+        'info' => 'typo3/cms-info',
+        'info_pagetsconfig' => 'typo3/cms-info-pagetsconfig',
+        'install' => 'typo3/cms-install',
+        'lang' => 'typo3/cms-lang',
+        'linkvalidator' => 'typo3/cms-linkvalidator',
+        'lowlevel' => 'typo3/cms-lowlevel',
+        'opendocs' => 'typo3/cms-opendocs',
+        'recordlist' => 'typo3/cms-recordlist',
+        'recycler' => 'typo3/cms-recycler',
+        'redirects' => 'typo3/cms-redirects',
+        'reports' => 'typo3/cms-reports',
+        'rsaauth' => 'typo3/cms-rsaauth',
+        'rte_ckeditor' => 'typo3/cms-rte-ckeditor',
+        'saltedpasswords' => 'typo3/cms-saltedpasswords',
+        'scheduler' => 'typo3/cms-scheduler',
+        'seo' => 'typo3/cms-seo',
+        'setup' => 'typo3/cms-setup',
+        'sv' => 'typo3/cms-sv',
+        'sys_action' => 'typo3/cms-sys-action',
+        'sys_note' => 'typo3/cms-sys-note',
+        't3editor' => 'typo3/cms-t3editor',
+        'taskcenter' => 'typo3/cms-taskcenter',
+        'tstemplate' => 'typo3/cms-tstemplate',
+        'version' => 'typo3/cms-version',
+        'viewpage' => 'typo3/cms-viewpage',
+        'wizard_crpages' => 'typo3/cms-wizard-crpages',
+        'wizard_sortpages' => 'typo3/cms-wizard-sortpages',
+        'workspaces' => 'typo3/cms-workspaces',
+      ];
+
+    /**
+     * Location where to output built files.
+     *
+     * @var string
+     */
+    protected $outputDir;
+
     protected function configure()
     {
         $this
             ->setName('extensions:ter:json:create')
-            ->setDescription('Creates packages.json files from ' . static::TER_XML_PATH);
+            ->setDescription('Creates packages.json files from ' . static::TER_XML_PATH)
+            ->setDefinition([
+                new InputArgument('output-dir', InputArgument::OPTIONAL, 'Location where to output built files', './Web'),
+            ]);
     }
 
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
+     *
+     * @return int 0 if everything went fine, or an exit code
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->outputDir = realpath($input->getArgument('output-dir'));
+
         $this->fetchComposerNames();
+        $this->saveAliases();
         $extensions = $this->getExtensions();
         $packages = $this->getPackages($extensions);
 
         foreach ($packages as $type => $content) {
-            $this->save($type, ['packages' => $content]);
+            $output->writeln(sprintf('Successfully created "%s"', $this->save($type, ['packages' => $content])));
+        }
+
+        return 0;
+    }
+
+    protected function registerComposerAlias(array $extensionKeys, string $composerName)
+    {
+        foreach ($extensionKeys as $extKey) {
+            if (!isset(self::$abandonedExtensionKeys[$extKey])) {
+                self::$abandonedExtensionKeys[$extKey] = $composerName;
+            }
         }
     }
 
@@ -119,10 +218,32 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
         }
 
         if (\is_array($json['data'])) {
+            // Assign core extensions
+            foreach (self::$coreExtensions as $extKey => $composerName) {
+                $json['data'][$extKey]['composer_name'] = $composerName;
+            }
+
             foreach ($json['data'] as $extKey => $settings) {
                 self::$abandonedExtensionKeys[$extKey] = $settings['composer_name'];
+
+                if (strpos($extKey, '_') !== false) {
+                    $this->registerComposerAlias([
+                        \str_replace('_', '-', $extKey),
+                        \str_replace('_', '', $extKey),
+                    ], $settings['composer_name']);
+                }
             }
+
+            ksort(self::$abandonedExtensionKeys, SORT_STRING);
         }
+    }
+
+    protected function saveAliases()
+    {
+        $fileName = $this->outputDir . '/' . self::ALIASES_FILE;
+        file_put_contents($fileName, json_encode(self::$abandonedExtensionKeys));
+
+        return $fileName;
     }
 
     /**
@@ -166,7 +287,10 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
     protected function getPackages($extensions)
     {
         $packages = [];
-        $quarter = mktime(0, 0, 0, floor((date('m') - 1) / 3) * 3 + 1, 1, date('Y'));
+        //$quarter = mktime(0, 0, 0, floor((date('m') - 1) / 3) * 3 + 1, 1, date('Y'));
+        $dateTimeToday = new \DateTimeImmutable();
+        $new = $dateTimeToday->modify('yesterday')->getTimestamp();
+
         foreach ($extensions as $extension) {
             foreach ($extension->version as $version) {
                 if (!preg_match('/^[\d]+\.[\d]+\.[\d]+$/', $version['version'])) {
@@ -182,8 +306,10 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
                     continue;
                 }
 
-                if ($quarter < (int)$version->lastuploaddate) {
-                    $packages['quarter'][$package['name']][$package['version']] = $package;
+                //if ($quarter < (int)$version->lastuploaddate) {
+                if ($new < (int)$version->lastuploaddate) {
+                    //$packages['quarter'][$package['name']][$package['version']] = $package;
+                    $packages['new'][$package['name']][$package['version']] = $package;
                 } else {
                     $packages['archive'][$package['name']][$package['version']] = $package;
                 }
@@ -217,12 +343,12 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
             }
         }
         $packageArray = [
-            'name' => $this->getPackageName((string)$extension['extensionkey']),
+            'name' => $this->getPackageName($extKey),
             'description' => (string)$version->description,
             'version' => (string)$version['version'],
             'type' => self::PACKAGE_TYPE,
             'time' => date('Y-m-d H:i:s', (int)$version->lastuploaddate),
-            'homepage' => sprintf(self::TER_HOME, (string)$extension['extensionkey']),
+            'homepage' => sprintf(self::TER_HOME, $extKey),
             'authors' => [
                 [
                     'name' => (string)$version->authorname,
@@ -236,6 +362,11 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
                 'type' => 'zip',
             ],
             'autoload' => $autoload,
+            'extra' => [
+                'typo3/cms' => [
+                    'extension-key' => $extKey,
+                ],
+            ],
         ];
 
         $packageArray = array_merge(
@@ -255,8 +386,7 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
             $this->getPackageLinks($dependencies)
         );
 
-        $packageArray['replace'][(string)$extension['extensionkey']] = 'self.version';
-        $alternativeName = self::PACKAGE_NAME_PREFIX . (string)$extension['extensionkey'];
+        $alternativeName = self::PACKAGE_NAME_PREFIX . $extKey;
         if ($alternativeName !== $packageArray['name']) {
             $packageArray['replace'][$alternativeName] = 'self.version';
         }
@@ -285,7 +415,6 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
                     break;
                 default:
                     continue 2;
-                    break;
             }
 
             if ($dependency['extensionKey'] !== 'php'
@@ -325,10 +454,14 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
     /**
      * @param string $type
      * @param array $content
+     * @return string
      */
     protected function save($type, array $content)
     {
-        file_put_contents($this->getJsonFilePath($type), json_encode($content));
+        $fileName = $this->getJsonFilePath($type);
+        file_put_contents($fileName, json_encode($content));
+
+        return $fileName;
     }
 
     /**
@@ -337,11 +470,8 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
      */
     protected function getJsonFilePath($type)
     {
-        $jsonFilePath = self::JSON_FILE_PATH;
+        $jsonFilePath = $this->outputDir . '/' . self::JSON_FILE;
         $jsonFilePath = str_replace('{type}', $type, $jsonFilePath);
-        if ($jsonFilePath[0] !== '/') {
-            $jsonFilePath = dirname($_SERVER['PHP_SELF']) . '/' . $jsonFilePath;
-        }
 
         return $jsonFilePath;
     }
@@ -394,6 +524,9 @@ class CreateTerExtensionJsonCommand extends \Symfony\Component\Console\Command\C
 
         if (isset(self::$abandonedExtensionKeys[$extKey])) {
             $packageArray['abandoned'] = self::$abandonedExtensionKeys[$extKey];
+        } else {
+            // Abandon all extensions because this repository is deprecated at all
+            $packageArray['abandoned'] = true;
         }
 
         return $packageArray;

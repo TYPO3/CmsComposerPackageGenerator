@@ -21,13 +21,15 @@
 
 namespace TYPO3\Composer\Tests\Unit\Command;
 
+use TYPO3\Composer\Command\ExtensionsTerJsonCreateCommand;
+
 /**
- * Class CreateTerExtensionJsonCommandTest
+ * Class ExtensionsTerJsonCreateCommandTest
  */
-class CreateTerExtensionJsonCommandTest extends \TYPO3\Composer\Tests\Unit\BaseTestCase
+class ExtensionsTerJsonCreateCommandTest extends \TYPO3\Composer\Tests\Unit\BaseTestCase
 {
     /**
-     * @var \TYPO3\Composer\Command\CreateTerExtensionJsonCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @var ExtensionsTerJsonCreateCommand
      */
     protected $command;
 
@@ -36,15 +38,15 @@ class CreateTerExtensionJsonCommandTest extends \TYPO3\Composer\Tests\Unit\BaseT
      */
     protected $fixture;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->fixture = new \SimpleXMLElement(file_get_contents(__DIR__ . '/../Fixture/extensions.xml'));
-        $this->command = $this->getAccessibleMock('TYPO3\\Composer\\Command\\CreateTerExtensionJsonCommand', ['dummy'], [], '', false);
+        $this->command = new ExtensionsTerJsonCreateCommand();
     }
 
     public function testFoo()
     {
-        $packages = $this->command->_call('getPackages', $this->fixture);
+        $packages = $this->callInaccessibleMethod($this->command, 'getPackages', $this->fixture);
 
         self::assertTrue(isset($packages['archive']['typo3-ter/gridelements']['3.0.0']['require']));
         self::assertFalse(isset($packages['archive']['typo3-ter/gridelements']['3.0.0']['require']['typo3-ter/version']));
@@ -55,7 +57,7 @@ class CreateTerExtensionJsonCommandTest extends \TYPO3\Composer\Tests\Unit\BaseT
      */
     public function reviewStatesArePopulatedAsSecureKeyInExtraSection()
     {
-        $packages = $this->command->_call('getPackages', $this->fixture);
+        $packages = $this->callInaccessibleMethod($this->command, 'getPackages', $this->fixture);
 
         self::assertTrue(isset($packages['archive']['typo3-ter/gridelements']['2.0.0']['extra']['typo3/ter']['review-state']));
         self::assertSame('insecure', $packages['archive']['typo3-ter/gridelements']['2.0.0']['extra']['typo3/ter']['review-state']);

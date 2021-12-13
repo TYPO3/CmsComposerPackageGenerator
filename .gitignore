@@ -1,8 +1,8 @@
 .DS_Store
 .idea
 
-/.php_cs.cache
 /bin/*
+!/bin/typo3-cms-package-generator
 /var
 /vendor
 /Web/packages*
