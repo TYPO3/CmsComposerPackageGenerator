@@ -104,7 +104,7 @@ class SatisBuildCommand extends \Symfony\Component\Console\Command\Command
 
             if (!$buildAll) {
                 $arguments += [
-                    '--repository-url' => 'file://' . realpath($repositoryDir) . '/packages-TYPO3Extensions-new.json',
+                    '--repository-url' => ['file://' . realpath($repositoryDir) . '/packages-TYPO3Extensions-new.json'],
                 ];
             }
 
